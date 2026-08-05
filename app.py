@@ -18,6 +18,7 @@ class Expense(db.Model):
     # intialising the columns 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(10), nullable=False)
     price = db.Column(db.Float, nullable=False)
     paid_amount = db.Column(db.Float, nullable=False)
     remain_amount = db.Column(db.Float, nullable=False)
@@ -97,6 +98,7 @@ def index():
 def add(): # the data send by method='POST', action={{url_for('add')}} 
     # pulling the data
     name = (request.form.get("name") or "").strip() # this mean return somthing or an empety string but don't return null
+    phone_str = (request.form.get("phone") or "").strip() # this mean return somthing or an empety string but don't return null
     price_str = (request.form.get("price") or "").strip()
     paid_amount_str = (request.form.get("paid_amount") or "").strip()
     remain_amount_str = (request.form.get("remain_amount") or "").strip()
@@ -130,8 +132,14 @@ def add(): # the data send by method='POST', action={{url_for('add')}}
         flash("Invalid price value", "error")
         return redirect(url_for("index"))
     
+    # try:
+    #     phone = int(phone_str) if price_str else 0
+    # except ValueError:
+    #     flash("Invalid phone value", "error")
+    #     return redirect(url_for("index"))
+    
     # adding the data into the database
-    e = Expense(name=name, price=price, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
+    e = Expense(name=name, phone=phone_str, price=price, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
     db.session.add(e)
     db.session.commit()
 
@@ -210,10 +218,10 @@ def export_csv():
         q = q.filter(Expense.category == selected_category)
         
     expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all() # pulling the data from the db
-    lines = ["date, name, category, price, paid_amount, remain_amount"] # header line
+    lines = ["date, name, phone, category, price, paid_amount, remain_amount"] # header line
 
     for e in expenses:
-        lines.append(f"{e.date.isoformat()}, {e.name}, {e.category}, {e.price:.2f}, {e.paid_amount:.2f}, {e.remain_amount:.2f}")
+        lines.append(f"{e.date.isoformat()}, {e.name}, {e.phone}, {e.category}, {e.price:.2f}, {e.paid_amount:.2f}, {e.remain_amount:.2f}")
     csv_data = "\n".join(lines)
 
     fname_start = start_str or "all"

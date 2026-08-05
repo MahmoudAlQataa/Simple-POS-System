@@ -23,6 +23,10 @@
           <input name="name" placeholder="e.g., Ahmed" class="input" />
         </label>
         <label class="field">
+          <span class="field-label">Phone</span>
+          <input name="phone" type="number" placeholder="05********" class="input" />
+        </label>
+        <label class="field">
           <span class="field-label">Paid Amount</span>
           <input name="paid_amount" id="paid_amount" type="number" step="0.01" min="0.01" placeholder="25.00"
             class="input" />
@@ -154,6 +158,7 @@
         <tr>
           <th class="text-left">Date</th>
           <th class="text-left">Name</th>
+          <th class="text-left">phone</th>
           <th class="text-left">Tests</th>
           <th class="text-right">Price</th>
           <th class="text-right">Paid Amount</th>
@@ -171,6 +176,7 @@
           <!-- looping in the data -->
           <td>{{ e.date.strftime("%Y-%m-%d") if e.date else '' }}</td>
           <td>{{ e.name }}</td>
+          <td>{{ e.phone }}</td>
           <td>{{ e.category }}</td>
           <td class="text-right">${{ '%.2f'|format(e.price) }}</td> <!-- formating for 2 digets , -->
           <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>
