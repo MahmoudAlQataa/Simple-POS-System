@@ -75,3 +75,31 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 });
+
+
+function openEditModal(id, name, phone, paidAmount) {
+  const modal = document.getElementById("editModal");
+  const form = document.getElementById("editForm");
+
+  // نعبي الفورم بالبيانات الحالية
+  document.getElementById("edit_name").value = name;
+  document.getElementById("edit_phone").value = phone;
+  document.getElementById("edit_paid_amount").value = paidAmount;
+
+  // نحدد وين رح يترسل الفورم (id الصف المحدد)
+  form.action = `/edit/${id}`;
+
+  modal.style.display = "flex";
+}
+
+function closeEditModal() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+// اختياري: تسكير الـ modal لو ضغط برا الصندوق
+document.addEventListener("click", function (e) {
+  const modal = document.getElementById("editModal");
+  if (e.target === modal) {
+    closeEditModal();
+  }
+});

@@ -292,6 +292,34 @@ a {
   padding: 4px 12px;
 }
 
+/* ============ Edit Model ============ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #0f172a; /* نفس لون الكروت عندك تقريباً */
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
 /* ============ Multiselect Dropdown ============ */
 .multiselect {
   position: relative;

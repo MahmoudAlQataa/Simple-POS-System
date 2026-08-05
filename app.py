@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, url_for, make_response, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date, datetime
 import socket
+import csv
+import io
+
 
 # intialaising the flask app
 app = Flask(__name__)
@@ -61,6 +64,7 @@ def index():
     # parse the start and end dates
     start_date = parse_date_or_none(start_str)
     end_date = parse_date_or_none(end_str)
+    search_name = (request.args.get("search_name") or "").strip()  # search by name
     # 
     if start_date and end_date and end_date < start_date:
         flash("End date can't be earlier than start date", "error")
@@ -75,7 +79,11 @@ def index():
         q = q.filter(Expense.date <= end_date)
     
     if selected_category:
-        q = q.filter(Expense.category == selected_category)
+        q = q.filter(Expense.category.contains(selected_category))
+
+    if search_name: # Name search (case-insensitive and partial)
+        q = q.filter(Expense.name.ilike(f"%{search_name}%"))
+
         
     # pulling the data from the db
     expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all() 
@@ -90,6 +98,7 @@ def index():
         start_str=start_str,
         end_str=end_str,
         selected_category=selected_category,
+        search_name=search_name,
         ) # sending the data to the front-end
 
 
@@ -156,6 +165,30 @@ def delete(expense_id):
     flash("Expense deleted", "success") # Flash a success massage
     return redirect(url_for("index")) # Redirect back to the index page
 
+@app.route("/edit/<int:id>", methods=["POST"])
+def edit_expense(id):
+    expense = Expense.query.get_or_404(id)
+
+    # Only editable fields
+    name = (request.form.get("name") or "").strip()
+    phone = (request.form.get("phone") or "").strip()
+    paid_amount_str = (request.form.get("paid_amount") or "0").strip()
+
+    try:
+        paid_amount = float(paid_amount_str)
+    except ValueError:
+        paid_amount = 0.0
+
+    # The `price` is fixed and immutable, while `remain_amount` is always calculated server-side.
+    expense.name = name
+    expense.phone = phone
+    expense.paid_amount = paid_amount
+    expense.remain_amount = paid_amount - expense.price # Server account, not from the form 
+
+    db.session.commit()
+
+    return redirect(url_for("index"))
+
 # settings route - add a new test (name + price)
 @app.route("/settings", methods=["GET"])
 def settings():
@@ -199,40 +232,52 @@ def delete_test(test_id):
 # export route
 @app.route("/export.csv")
 def export_csv():
-    # read the start and end date from the front-end query parameters
     start_str = (request.args.get("start") or "").strip()
     end_str = (request.args.get("end") or "").strip()
-    selected_category = (request.args.get("category") or "" ).strip()
-    # parse the start and end dates
+    selected_category = (request.args.get("category") or "").strip()
+
     start_date = parse_date_or_none(start_str)
     end_date = parse_date_or_none(end_str)
 
     q = Expense.query
-    
+
     if start_date:
         q = q.filter(Expense.date >= start_date)
     if end_date:
         q = q.filter(Expense.date <= end_date)
-    
     if selected_category:
         q = q.filter(Expense.category == selected_category)
-        
-    expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all() # pulling the data from the db
-    lines = ["date, name, phone, category, price, paid_amount, remain_amount"] # header line
 
-    for e in expenses:
-        lines.append(f"{e.date.isoformat()}, {e.name}, {e.phone}, {e.category}, {e.price:.2f}, {e.paid_amount:.2f}, {e.remain_amount:.2f}")
-    csv_data = "\n".join(lines)
+    expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all()
+
+    # We use StringIO + csv.writer instead of building the string manually.
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    writer.writerow(["date", "name", "phone", "category", "price", "paid_amount", "remain_amount"]) # header row
+
+    for e in expenses: # data rows
+        writer.writerow([
+            e.date.isoformat(),
+            e.name,
+            e.phone,
+            e.category,         # csv.writer automatically adds quotes if there are commas.
+            f"{e.price:.2f}",
+            f"{e.paid_amount:.2f}",
+            f"{e.remain_amount:.2f}",
+        ])
+
+    csv_data = output.getvalue()
 
     fname_start = start_str or "all"
     fname_end = end_str or "all"
     filename = f"expenses_{fname_start}_to_{fname_end}.csv"
-    
+
     return Response(
         csv_data,
         headers={
-            "Content-Type" : "text/csv",
-            "Content-Disposition" : f"attachment; filename={filename}",
+            "Content-Type": "text/csv",
+            "Content-Disposition": f"attachment; filename={filename}",
         }
     )
 
