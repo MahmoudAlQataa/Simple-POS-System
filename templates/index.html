@@ -176,7 +176,7 @@
           <!-- looping in the data -->
           <td>{{ e.date.strftime("%Y-%m-%d") if e.date else '' }}</td>
           <td>{{ e.name }}</td>
-          <td>{{ e.phone }}</td>
+          <td>0{{ e.phone }}</td>
           <td>{{ e.category }}</td>
           <td class="text-right">${{ '%.2f'|format(e.price) }}</td> <!-- formating for 2 digets , -->
           <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>

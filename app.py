@@ -18,7 +18,7 @@ class Expense(db.Model):
     # intialising the columns 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
-    phone = db.Column(db.String(10), nullable=False)
+    phone = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
     paid_amount = db.Column(db.Float, nullable=False)
     remain_amount = db.Column(db.Float, nullable=False)
@@ -132,14 +132,14 @@ def add(): # the data send by method='POST', action={{url_for('add')}}
         flash("Invalid price value", "error")
         return redirect(url_for("index"))
     
-    # try:
-    #     phone = int(phone_str) if price_str else 0
-    # except ValueError:
-    #     flash("Invalid phone value", "error")
-    #     return redirect(url_for("index"))
+    try:
+        phone = int(phone_str) if price_str else 0000000000
+    except ValueError:
+        flash("Invalid phone value", "error")
+        return redirect(url_for("index"))
     
     # adding the data into the database
-    e = Expense(name=name, phone=phone_str, price=price, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
+    e = Expense(name=name, phone=phone, price=price, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
     db.session.add(e)
     db.session.commit()
 
