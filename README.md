@@ -1,10 +1,10 @@
-# Expense Tracker
+# Simple POS System
 
-A simple Flask project for tracking daily expenses. Still under development 🚧
+A simple Flask project for POS expenses. Still under development 🚧
 
 ## 📌 Overview
 
-A system for recording and tracking personal expenses, built with Flask and SQLAlchemy. The current goal is to build a basic working version, with plans to expand later (e.g., turning it into a simple daily financial ledger for a small shop).
+A system for recording and tracking POS expenses, built with Flask and SQLAlchemy. The current goal is to build a basic working version, with plans to expand later (e.g., turning it into a simple daily financial ledger for a small shop).
 
 ## 🛠️ Tech Stack
 
@@ -33,8 +33,8 @@ This project is still in progress.
 ## ⚙️ Running Locally
 
 ```bash
-git clone https://github.com/MahmoudAlQataa/Expense-Tracker.git
-cd Expense-Tracker
+git clone https://github.com/MahmoudAlQataa/Simple-POS-System
+cd Simple-POS-System
 
 python -m venv venv
 source venv/bin/activate  # on Windows: venv\Scripts\activate
@@ -46,7 +46,7 @@ flask run
 
 ## 📂 Project Structure
 ```
-Expense-Tracker/
+Simple-POS-System/
 ├── static/
 │ ├── css/
 │ └── js/
