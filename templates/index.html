@@ -1,15 +1,82 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard · Expense Tracker{% endblock %}
+{% block title %}Dashboard · POS{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Dashboard</h1>
+<!-- <h1 class="page-title">Dashboard</h1>
 <p class="page-subtitle">
   Track spending, filter by date/category, and visualize instantly.
-</p>
+</p> -->
 
 <!-- Filters + Add form -->
 <div class="grid-layout">
+
+
+
+  <!-- Add Expense -->
+  <section class="card">
+    <h2 class="card-title">Add Expense</h2>
+    <form method="post" action="{{url_for('add')}}" class="add-form">
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">Name</span>
+          <input name="name" placeholder="e.g., Ahmed" class="input" />
+        </label>
+        <label class="field">
+          <span class="field-label">Paid Amount</span>
+          <input name="paid_amount" id="paid_amount" type="number" step="0.01" min="0.01" placeholder="25.00"
+            class="input" />
+        </label>
+        <label class="field">
+          <span class="field-label">Price</span>
+          <input name="price" id="price" type="number" step="0.01" min="0.01" placeholder="00.00"
+            class="input input-readonly" readonly />
+        </label>
+        <label class="field">
+          <span class="field-label">Remain Amount</span>
+          <input name="remain_amount" id="remain_amount" type="number" step="0.01" min="0.01" placeholder="00.00"
+            class="input input-readonly" readonly />
+        </label>
+        <label class="field">
+          <span class="field-label">Date</span>
+          <input name="date" type="date" value="{{ today }}" class="input" />
+        </label>
+      </div>
+
+      <div class="field-row2">
+
+        <label class="field">
+          <span class="field-label">Tests</span>
+
+          <div class="multiselect" id="testsDropdown">
+            <button type="button" class="multiselect-toggle input" id="testsToggleBtn">
+              <span id="testsToggleLabel">Select tests...</span>
+              <span class="multiselect-arrow">▾</span>
+            </button>
+
+            <div class="multiselect-panel" id="testsPanel">
+              {% for t in categories %}
+              <label class="multiselect-item">
+                <input type="checkbox" class="test-checkbox" value="{{ t.name }}" data-price="{{ t.price }}" />
+                <span>{{ t.name }} — ${{ '%.2f'|format(t.price) }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- هاد الحقل هو يلي فعلياً بينبعت للسيرفر -->
+          <input type="hidden" name="category" id="category" />
+        </label>
+
+        <button class="btn btn-primary btn-block" type="submit">
+          Add Expense
+        </button>
+
+      </div>
+
+    </form>
+  </section>
+
 
   <!-- Filters -->
   <section class="card card-filters">
@@ -24,12 +91,12 @@
         <input name="end" value="{{ end_str or '' }}" type="date" class="input" />
       </label>
       <label class="field field-wide">
-        <span class="field-label">Category</span>
+        <span class="field-label">Tests</span>
         <select name="category" class="input">
           <option value="">All</option>
 
           {% for c in categories %} <!-- pulling the category -->
-          <option value="{{ c }}" {% if selected_category==c %} selected {% endif %}>{{ c }}</option>
+          <option value="{{ c.name }}" {% if selected_category in c.name %} selected {% endif %}>{{ c.name }}</option>
           {% endfor %}
 
         </select>
@@ -44,13 +111,14 @@
       </div>
     </form>
 
+
     <!-- Total -->
-    <div class="total-line">
-      <span class="mr-2">Total:</span>
-      <span class="total-badge">
-        ${{ '%2.f'|format(total or 0) }}
-      </span>
-    </div>
+    <!-- <div class="total-line">
+        <span class="mr-2">Total:</span>
+        <span class="total-badge">
+          ${{ '%2.f'|format(total or 0) }}
+        </span>
+      </div> -->
 
     <!-- Export link -->
     <div class="export-line">
@@ -59,44 +127,12 @@
         Export CSV (current filter)
       </a>
     </div>
+
   </section>
 
-  <!-- Add Expense -->
-  <section class="card">
-    <h2 class="card-title">Add Expense</h2>
-    <form method="post" action="{{url_for('add')}}" class="add-form">
-      <label class="field">
-        <span class="field-label">Description</span>
-        <input name="description" placeholder="e.g., Groceries" class="input" />
-      </label>
-      <div class="field-row">
-        <label class="field">
-          <span class="field-label">Amount</span>
-          <input name="amount" type="number" step="0.01" min="0.01" placeholder="25.00" class="input" />
-        </label>
-        <label class="field">
-          <span class="field-label">Date</span>
-          <input name="date" type="date" value="{{ today }}" class="input" />
-        </label>
-      </div>
-      <label class="field">
-        <!-- this is the section where you should do your stuff into it -->
-        <span class="field-label">Category</span>
-        <select name="category" class="input">
 
-          {% for c in categories %} <!-- pulling the categories -->
 
-          <option value="{{ c }}">{{ c }}</option>
 
-          {% endfor %}
-
-        </select>
-      </label>
-      <button class="btn btn-primary btn-block" type="submit">
-        Add Expense
-      </button>
-    </form>
-  </section>
 </div>
 
 <!-- Total (global) -->
@@ -117,9 +153,11 @@
       <thead>
         <tr>
           <th class="text-left">Date</th>
-          <th class="text-left">Description</th>
-          <th class="text-left">Category</th>
-          <th class="text-right">Amount</th>
+          <th class="text-left">Name</th>
+          <th class="text-left">Tests</th>
+          <th class="text-right">Price</th>
+          <th class="text-right">Paid Amount</th>
+          <th class="text-right">Remain Amount</th>
           <th></th>
         </tr>
       </thead>
@@ -132,9 +170,11 @@
         <tr>
           <!-- looping in the data -->
           <td>{{ e.date.strftime("%Y-%m-%d") if e.date else '' }}</td>
-          <td>{{ e.description }}</td>
+          <td>{{ e.name }}</td>
           <td>{{ e.category }}</td>
-          <td class="text-right">${{ '%.2f'|format(e.amount) }}</td> <!-- formating for 2 digets , -->
+          <td class="text-right">${{ '%.2f'|format(e.price) }}</td> <!-- formating for 2 digets , -->
+          <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>
+          <td class="text-right">${{ '%.2f'|format(e.remain_amount) }}</td>
           <td class="text-right">
 
 

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Settings · Expense Tracker{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Settings</h1>
+<p class="page-subtitle">
+    Add and manage your test names and prices.
+</p>
+
+<div class="grid-layout-setting">
+
+    <!-- Tests table -->
+    <section class="card table-card">
+        <div class="table-card-header">
+            <h2 class="card-title">Tests</h2>
+        </div>
+        <div class="table-scroll">
+            <table class="expenses-table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Name</th>
+                        <th class="text-right">Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% if tests %}
+
+                    {% for t in tests %}
+
+                    <tr>
+                        <td>{{ t.name }}</td>
+                        <td class="text-right">${{ '%.2f'|format(t.price) }}</td>
+                        <td class="text-right">
+
+                            <form action="{{ url_for('delete_test', test_id=t.id) }}" method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete?')">
+                                <button class="btn btn-danger btn-sm">
+                                    Delete
+                                </button>
+                            </form>
+
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                    {% else %}
+
+                    <tr>
+                        <td colspan="3" class="empty-row">
+                            No tests yet — add your first one below.
+                        </td>
+                    </tr>
+
+                    {% endif %}
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Add Test -->
+    <section class="card">
+        <h2 class="card-title">Add Test</h2>
+        <form method="post" action="{{ url_for('add_test') }}" class="add-form">
+            <label class="field">
+                <span class="field-label">Name</span>
+                <input name="name" placeholder="e.g., CBC" class="input" />
+            </label>
+            <label class="field">
+                <span class="field-label">Price</span>
+                <input name="price" type="number" step="0.01" min="0.01" placeholder="10.00" class="input" />
+            </label>
+            <button class="btn btn-primary btn-block" type="submit">
+                Add Test
+            </button>
+        </form>
+    </section>
+
+</div>
+{% endblock %}

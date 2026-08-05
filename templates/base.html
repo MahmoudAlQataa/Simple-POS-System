@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{% block title %}Expense Tracker Lite{% endblock %}</title>
+  <title>{% block title %}POS SYSTEM Lite{% endblock %}</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   {% block head_extra %}{% endblock %}
@@ -12,11 +12,22 @@
 
 <body>
   <header class="site-header">
-    <div class="container">
+    <div class="container header-inner">
       <a href="#" class="logo">
-        <span class="brand-text">Expense</span> Tracker
+        <span class="brand-text">POS</span> System
         <span class="muted">Lite</span>
       </a>
+
+      <nav class="nav-links">
+        <a href="{{ url_for('index') }}"
+          class="nav-link {% if request.endpoint == 'index' %}nav-link-active{% endif %}">
+          Dashboard
+        </a>
+        <a href="{{ url_for('settings') }}"
+          class="nav-link {% if request.endpoint == 'settings' %}nav-link-active{% endif %}">
+          Settings
+        </a>
+      </nav>
     </div>
   </header>
 
