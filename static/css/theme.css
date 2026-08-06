@@ -1,0 +1,48 @@
+/* ============ Theme: White & Pink (Professional) ============ */
+:root {
+  /* الخلفيات */
+  --bg-page: #faf7f9;          /* أبيض مائل لرمادي خفيف جداً — يريح العين من الأبيض الناصع */
+  --bg-surface: #ffffff;       /* أبيض ناصع للكروت */
+  --bg-surface-alt: #fdf2f7;   /* وردي فاتح جداً — بس لعناصر مميزة زي header الجدول */
+  --bg-header: rgba(255, 255, 255, 0.85);
+
+  /* الحدود */
+  --border-color: #eddce6;     /* رمادي-وردي فاتح، حدود هادئة */
+  --border-color-soft: #f3e6ee;
+  --border-focus: #db2777;     /* لما يضغط المستخدم على حقل */
+
+  /* النصوص */
+  --text-main: #2d2130;        /* غامق قريب للأسود، مو بنفسجي فاقع */
+  --text-muted: #8a7688;       /* رمادي-بنفسجي هادئ للنصوص الثانوية */
+  --text-on-accent: #ffffff;
+
+  /* اللون الأساسي (Brand / Accent) — يُستخدم بس للعناصر المهمة */
+  --accent: #db2777;
+  --accent-dark: #be185d;      /* hover */
+  --accent-soft-bg: #fce7f3;   /* خلفية خفيفة (badges, active states) */
+  --accent-soft-border: #f9a8d4;
+  --accent-hover-bg: #fbcfe8;
+
+  /* حالات النجاح / الخطأ */
+  --success-text: #15803d;
+  --success-bg: rgba(34, 197, 94, 0.1);
+  --success-border: rgba(34, 197, 94, 0.25);
+
+  --error-text: #be123c;
+  --error-bg: rgba(244, 63, 94, 0.08);
+  --error-border: rgba(244, 63, 94, 0.25);
+
+  --neutral-flash-bg: #f7f2f5;
+  --neutral-flash-text: #4a044e;
+
+  /* الأزرار الثانوية (غير الأساسية) */
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-border: #eddce6;
+  --btn-secondary-text: #2d2130;
+
+  /* أزرار الخطر (حذف) */
+  --danger-text: #e11d48;
+  --danger-border: rgba(225, 29, 72, 0.3);
+
+  --footer-text: #b8a6b3;
+}
