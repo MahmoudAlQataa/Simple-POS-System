@@ -1,54 +1,29 @@
-from flask import render_template, request, flash
+from flask import render_template
 from datetime import date
 
 from routes import main_bp
 from models import Expense
-from services import get_tests, parse_date_or_none
+from services import get_tests
 
 
 # the main route
 @main_bp.route("/")
 def index():
-    # ======================== THE FILTERs ========================
-    # read the start and end date from the front-end query parameters
-    start_str = (request.args.get("start") or "").strip()
-    end_str = (request.args.get("end") or "").strip()
-    selected_category = (request.args.get("category") or "").strip()
-    # parse the start and end dates
-    start_date = parse_date_or_none(start_str)
-    end_date = parse_date_or_none(end_str)
-    search_name = (request.args.get("search_name") or "").strip()  # search by name
-    #
-    if start_date and end_date and end_date < start_date:
-        flash("End date can't be earlier than start date", "error")
-        start_date = end_date = None
-        start_str = end_str = ""
-    #
+    
     q = Expense.query
-
-    if start_date:
-        q = q.filter(Expense.date >= start_date)
-    if end_date:
-        q = q.filter(Expense.date <= end_date)
-
-    if selected_category:
-        q = q.filter(Expense.category.contains(selected_category))
-
-    if search_name:  # Name search (case-insensitive and partial)
-        q = q.filter(Expense.name.ilike(f"%{search_name}%"))
-
-    # pulling the data from the db
-    expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all()
-    total = round(sum(e.price for e in expenses), 2)  # sum of price
-
+    expenses_today = q.filter(Expense.date == date.today()).order_by(Expense.date.desc(), Expense.id.desc()).all()
+    total = round(sum(e.price for e in expenses_today), 2)  # sum of price
+    total_paid = round(sum(e.paid_amount for e in expenses_today), 2)  # sum of price
+    total_outstanding = round(sum(e.remain_amount for e in expenses_today if e.remain_amount < 0), 2)  # sum of total that you need from the customer
+    total_overpaid = round(sum(e.remain_amount for e in expenses_today if e.remain_amount > 0), 2)  # sum of total thet the customer need from you
+    
     return render_template(
         "index.html",
         categories=get_tests(),
         today=date.today().isoformat(),
-        expenses=expenses,
+        expenses_today=expenses_today,
         total=total,
-        start_str=start_str,
-        end_str=end_str,
-        selected_category=selected_category,
-        search_name=search_name,
+        total_paid=total_paid,
+        total_outstanding=total_outstanding,
+        total_overpaid=total_overpaid,
     )  # sending the data to the front-end

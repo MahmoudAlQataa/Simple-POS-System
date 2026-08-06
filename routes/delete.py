@@ -1,4 +1,4 @@
-from flask import url_for, flash, redirect
+from flask import url_for, flash, redirect, request
 
 from routes import main_bp
 from extensions import db
@@ -12,4 +12,6 @@ def delete(expense_id):
     db.session.delete(e)  # Delete the expense from the database
     db.session.commit()  # Commit the changes to the database
     flash("Expense deleted", "success")  # Flash a success massage
-    return redirect(url_for("main.index"))  # Redirect back to the index page
+    if request.referrer:
+        return redirect(request.referrer)  # Redirect back to the previous page
+    # return redirect(url_for("main.index"))  # Redirect back to the index page

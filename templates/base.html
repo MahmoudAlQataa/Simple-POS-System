@@ -20,11 +20,15 @@
 
       <nav class="nav-links">
         <a href="{{ url_for('main.index') }}"
-          class="nav-link {% if request.endpoint == 'index' %}nav-link-active{% endif %}">
+          class="nav-link {% if request.endpoint == 'main.index' %}nav-link-active{% endif %}">
           Dashboard
         </a>
+        <a href="{{ url_for('main.data') }}"
+          class="nav-link {% if request.endpoint == 'main.data' %}nav-link-active{% endif %}">
+          Data
+        </a>
         <a href="{{ url_for('main.settings') }}"
-          class="nav-link {% if request.endpoint == 'settings' %}nav-link-active{% endif %}">
+          class="nav-link {% if request.endpoint == 'main.settings' %}nav-link-active{% endif %}">
           Settings
         </a>
       </nav>

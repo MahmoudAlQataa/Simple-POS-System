@@ -26,5 +26,6 @@ def edit_expense(id):
     expense.remain_amount = paid_amount - expense.price  # Server account, not from the form
 
     db.session.commit()
-
-    return redirect(url_for("main.index"))
+    if request.referrer:
+            return redirect(request.referrer)  # Redirect back to the previous page
+    # return redirect(url_for("main.index"))

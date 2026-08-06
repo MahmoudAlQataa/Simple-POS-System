@@ -5,13 +5,11 @@
 {% block content %}
 <h1 class="page-title">Dashboard</h1>
 <p class="page-subtitle">
-  Track earning, filter by date/category, and visualize instantly.
+  Add Expense and See what you earn today, and visualize instantly.
 </p>
 
-<!-- Filters + Add form -->
+<!-- Add form -->
 <div class="grid-layout">
-
-
 
   <!-- Add Expense -->
   <section class="card">
@@ -81,85 +79,47 @@
     </form>
   </section>
 
+</div>
 
-  <!-- Filters -->
-  <section class="card card-filters">
-    <h2 class="card-title">Filters</h2>
-    <form method="get" action="{{ url_for('main.index') }}" class="filters-form">
-      <label class="field">
-        <span class="field-label">Start</span>
-        <input name="start" value="{{ start_str or '' }}" type="date" class="input" />
-      </label>
-      <label class="field">
-        <span class="field-label">End</span>
-        <input name="end" value="{{ end_str or '' }}" type="date" class="input" />
-      </label>
+<!-- Totals -->
+<div class="field-row4">
 
-      <!-- search by name -->
-      <label class="field">
-        <span class="field-label">Name</span>
-        <input name="search_name" value="{{ search_name or '' }}" type="text" class="input"
-          placeholder="search by name..." />
-      </label>
+  <!-- Total (global) -->
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">Total:</span>
+    <span class="total-badge">
+      ${{ '%2.f'|format(total or 0) }}
+    </span>
+  </div>
 
-      <label class="field field-wide">
-        <span class="field-label">Tests</span>
-        <select name="category" class="input">
-          <option value="">All</option>
+  <!-- Total (Paid) -->
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">Total Paid:</span>
+    <span class="total-badge">
+      ${{ '%2.f'|format(total_paid or 0) }}
+    </span>
+  </div>
 
-          {% for c in categories %}
-          <option value="{{ c.name }}" {% if selected_category==c.name %} selected {% endif %}>{{ c.name }}</option>
-          {% endfor %}
-
-        </select>
-      </label>
-      <div class="filters-actions">
-        <button class="btn btn-primary" type="submit">
-          Apply
-        </button>
-        <a class="btn btn-secondary" href="{{ url_for('main.index') }}">
-          Reset
-        </a>
-      </div>
-    </form>
-
-
-
-    <!-- Export link -->
-    <div class="export-line">
-      <a class="export-link"
-        href="{{ url_for('main.export_csv', start=start_str, end=end_str, category=selected_category) }}">
-        Export CSV (current filter)
-      </a>
-    </div>
-
-    <!-- Total -->
-    <!-- <div class="total-line">
-      <span class="mr-2">Total:</span>
-      <span class="total-badge">
-        ${{ '%2.f'|format(total or 0) }}
-      </span>
-    </div> -->
-
-  </section>
-
-
-
+  <!-- Total (Remain) -->
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">Total Outstanding:</span>
+    <span class="total-badge">
+      ${{ '%2.f'|format(total_outstanding or 0) }}
+    </span>
+  </div>
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">Total Overpaid:</span>
+    <span class="total-badge">
+      ${{ '%2.f'|format(total_overpaid or 0) }}
+    </span>
+  </div>
 
 </div>
 
-<!-- Total (global) -->
-<div class="total-line total-line-spaced">
-  <span class="mr-2">Total:</span>
-  <span class="total-badge">
-    ${{ '%2.f'|format(total or 0) }}
-  </span>
-</div>
-
-<!-- Expenses table -->
+<!-- Today Expenses table -->
 <section class="card table-card">
   <div class="table-card-header">
-    <h2 class="card-title">Expenses</h2>
+    <h2 class="card-title">Expenses for Today</h2>
   </div>
   <div class="table-scroll">
     <table class="expenses-table">
@@ -177,9 +137,9 @@
       </thead>
       <tbody>
 
-        {% if expenses%} <!-- the if in flask -->
+        {% if expenses_today%} <!-- the if in flask -->
 
-        {% for e in expenses %} <!-- for loop in flask -->
+        {% for e in expenses_today%} <!-- for loop in flask -->
 
         <tr>
           <!-- looping in the data -->
