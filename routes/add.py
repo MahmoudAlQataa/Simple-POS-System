@@ -40,15 +40,15 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
         d = date.today
     #
     try:
-        price = float(price_str) if price_str else 0.0
-        remain_amount = paid_amount - price
-    except ValueError:
-        flash("Invalid price value", "error")
-        return redirect(url_for("main.index"))
-    try:
         discount = float(discount_str) if discount_str else 0.0
     except ValueError:
         flash("Invalid discount value", "error")
+        return redirect(url_for("main.index"))
+    try:
+        price = float(price_str) if price_str else 0.0
+        remain_amount = paid_amount - (price - discount)
+    except ValueError:
+        flash("Invalid price value", "error")
         return redirect(url_for("main.index"))
 
     try:

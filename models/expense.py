@@ -10,7 +10,7 @@ class Expense(db.Model):
     name = db.Column(db.String(120), nullable=False)
     phone = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
-    discount = db.Column(db.Float, nullable=False)
+    discount = db.Column(db.Float, nullable=False, default=0.0)
     paid_amount = db.Column(db.Float, nullable=False)
     remain_amount = db.Column(db.Float, nullable=False)
     category = db.Column(db.String(50), nullable=False)

@@ -171,7 +171,7 @@
 
                         <!-- 🆕 زر Edit -->
                         <button type="button" class="btn btn-edit"
-                            onclick="openEditModal({{ e.id }}, '{{ e.name|e }}', '{{ e.phone|e }}', {{ e.paid_amount }})">
+                            onclick="openEditModal({{ e.id }}, '{{ e.name|e }}', '{{ e.phone|e }}', {{ e.paid_amount }}, {{ e.discount }})">
                             Edit
                         </button>
                     </td>
@@ -214,6 +214,11 @@
                     <label class="field">
                         <span class="field-label">Phone</span>
                         <input type="text" name="phone" id="edit_phone" class="input" />
+                    </label>
+
+                    <label class="field">
+                        <span class="field-label">Discount</span>
+                        <input type="number" step="0.01" min="0" name="discount" id="edit_discount" class="input" />
                     </label>
 
                     <label class="field">

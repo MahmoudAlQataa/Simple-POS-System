@@ -46,7 +46,7 @@ def data():
 
     # pulling the data from the db
     expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all()
-    total = round(sum(e.price for e in expenses), 2)  # sum of price
+    total = round(sum(e.price-e.discount for e in expenses), 2)  # sum of price
     total_paid = round(sum(e.paid_amount for e in expenses), 2)  # sum of total paid amount
     total_outstanding = round(sum(e.remain_amount for e in expenses if e.remain_amount < 0), 2)  # sum of total that you need from the customer
     total_overpaid = round(sum(e.remain_amount for e in expenses if e.remain_amount > 0), 2)  # sum of total thet the customer need from you

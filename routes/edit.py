@@ -13,17 +13,28 @@ def edit_expense(id):
     name = (request.form.get("name") or "").strip()
     phone = (request.form.get("phone") or "").strip()
     paid_amount_str = (request.form.get("paid_amount") or "0").strip()
+    discount_str = (request.form.get("discount") or "0").strip()
 
     try:
         paid_amount = float(paid_amount_str)
     except ValueError:
         paid_amount = 0.0
 
+    try:
+        discount = float(discount_str)
+    except ValueError:
+        discount = 0.0
+
+    # Protection: The discount cannot exceed the original price.
+    if discount > expense.price:
+        discount = expense.price
+
     # The `price` is fixed and immutable, while `remain_amount` is always calculated server-side.
     expense.name = name
     expense.phone = phone
     expense.paid_amount = paid_amount
-    expense.remain_amount = paid_amount - expense.price  # Server account, not from the form
+    expense.discount = discount
+    expense.remain_amount = paid_amount - (expense.price - discount)  # Server account, not from the form
 
     db.session.commit()
     if request.referrer:

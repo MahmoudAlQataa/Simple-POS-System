@@ -12,12 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const paidInput = document.getElementById("paid_amount");
   const remainInput = document.getElementById("remain_amount");
   const categoryInput = document.getElementById("category");
+  const discountInput = document.getElementById("discount");   // ✅ جديد
   const toggleBtn = document.getElementById("testsToggleBtn");
   const toggleLabel = document.getElementById("testsToggleLabel");
   const panel = document.getElementById("testsPanel");
   const dropdown = document.getElementById("testsDropdown");
 
-  // فتح / إغلاق القائمة
+  // Open / Close the list
   if (toggleBtn) {
     toggleBtn.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -25,14 +26,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // سكر القائمة لو ضغط المستخدم برا الدروب داون
   document.addEventListener("click", function (e) {
     if (dropdown && !dropdown.contains(e.target)) {
       panel.classList.remove("open");
     }
   });
 
-  function updateSelection() {
+function updateSelection() {
     const selected = [];
     let total = 0;
 
@@ -43,15 +43,27 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // تحديث الحقل المخفي (category) بأسماء التحاليل المختارة
     categoryInput.value = selected.join(", ");
 
-    // تحديث نص الزر
     toggleLabel.textContent = selected.length > 0
       ? selected.join(", ")
       : "Select tests...";
 
-    // تحديث السعر
+    applyPrice(total);
+  }
+
+  function applyPrice(total) {
+    let discount = parseFloat(discountInput?.value) || 0;
+
+    // The protection is now based on a comparison with `total` itself (since `price` always equals `total`).
+    if (discount > total) {
+      discount = total;
+      if (discountInput) {
+        discountInput.value = total.toFixed(2);
+      }
+    }
+
+    // price keeps displaying the original total without the discount.
     if (priceInput) {
       priceInput.value = total.toFixed(2);
     }
@@ -62,8 +74,11 @@ document.addEventListener("DOMContentLoaded", function () {
   function calculateRemain() {
     if (!priceInput || !paidInput || !remainInput) return;
     const price = parseFloat(priceInput.value) || 0;
+    const discount = parseFloat(discountInput?.value) || 0;   // New
     const paid = parseFloat(paidInput.value) || 0;
-    remainInput.value = (paid - price).toFixed(2);
+
+    // The discount applies only here.
+    remainInput.value = (paid - (price - discount)).toFixed(2);
   }
 
   testCheckboxes.forEach(function (checkbox) {
@@ -74,19 +89,33 @@ document.addEventListener("DOMContentLoaded", function () {
     paidInput.addEventListener("input", calculateRemain);
   }
 
+  if (discountInput) {
+    discountInput.addEventListener("input", function () {
+      // We recalculate the total based on the currently selected tests.
+      let total = 0;
+      testCheckboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+          total += parseFloat(checkbox.dataset.price) || 0;
+        }
+      });
+      applyPrice(total);
+    });
+  }
+
 });
 
 
-function openEditModal(id, name, phone, paidAmount) {
+function openEditModal(id, name, phone, paidAmount, discount) {
   const modal = document.getElementById("editModal");
   const form = document.getElementById("editForm");
 
-  // نعبي الفورم بالبيانات الحالية
+  // We fill the form with the current data.
   document.getElementById("edit_name").value = name;
   document.getElementById("edit_phone").value = phone;
   document.getElementById("edit_paid_amount").value = paidAmount;
+  document.getElementById("edit_discount").value = discount;
 
-  // نحدد وين رح يترسل الفورم (id الصف المحدد)
+  // We specify where the form will be sent (the ID of the selected row).
   form.action = `/edit/${id}`;
 
   modal.style.display = "flex";
@@ -96,7 +125,7 @@ function closeEditModal() {
   document.getElementById("editModal").style.display = "none";
 }
 
-// اختياري: تسكير الـ modal لو ضغط برا الصندوق
+// Optional: Close the modal when clicking outside the box.
 document.addEventListener("click", function (e) {
   const modal = document.getElementById("editModal");
   if (e.target === modal) {
