@@ -13,6 +13,7 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
     name = (request.form.get("name") or "").strip()  # this mean return somthing or an empety string but don't return null
     phone_str = (request.form.get("phone") or "").strip()  # this mean return somthing or an empety string but don't return null
     price_str = (request.form.get("price") or "").strip()
+    discount_str = (request.form.get("discount") or "").strip()
     paid_amount_str = (request.form.get("paid_amount") or "").strip()
     remain_amount_str = (request.form.get("remain_amount") or "").strip()
     category = (request.form.get("category") or "").strip()
@@ -44,6 +45,11 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
     except ValueError:
         flash("Invalid price value", "error")
         return redirect(url_for("main.index"))
+    try:
+        discount = float(discount_str) if discount_str else 0.0
+    except ValueError:
+        flash("Invalid discount value", "error")
+        return redirect(url_for("main.index"))
 
     try:
         phone = int(phone_str) if price_str else 0000000000
@@ -52,7 +58,7 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
         return redirect(url_for("main.index"))
 
     # adding the data into the database
-    e = Expense(name=name, phone=phone, price=price, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
+    e = Expense(name=name, phone=phone, price=price, discount=discount, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
     db.session.add(e)
     db.session.commit()
 

@@ -144,6 +144,7 @@
                     <th class="text-left">phone</th>
                     <th class="text-left">Tests</th>
                     <th class="text-right">Price</th>
+                    <th class="text-right">Discount</th>
                     <th class="text-right">Paid Amount</th>
                     <th class="text-right">Remain Amount</th>
                     <th>Edit</th>
@@ -163,6 +164,7 @@
                     <td>0{{ e.phone }}</td>
                     <td>{{ e.category }}</td>
                     <td class="text-right">${{ '%.2f'|format(e.price) }}</td> <!-- formating for 2 digets , -->
+                    <td class="text-right">${{ '%.2f'|format(e.discount) }}</td> <!-- formating for 2 digets , -->
                     <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>
                     <td class="text-right">${{ '%.2f'|format(e.remain_amount) }}</td>
                     <td class="text-right">
