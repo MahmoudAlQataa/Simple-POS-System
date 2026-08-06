@@ -11,43 +11,67 @@
 <!-- Filters -->
 <section class="card card-filters">
     <h2 class="card-title">Filters</h2>
-    <form method="get" action="{{ url_for('main.data') }}" class="filters-form">
-        <label class="field">
-            <span class="field-label">Start</span>
-            <input name="start" value="{{ start_str or '' }}" type="date" class="input" />
-        </label>
-        <label class="field">
-            <span class="field-label">End</span>
-            <input name="end" value="{{ end_str or '' }}" type="date" class="input" />
-        </label>
+    <form method="get" action="{{ url_for('main.data') }}">
+        <div class="filters-form">
+            <label class="field">
+                <span class="field-label">Start</span>
+                <input name="start" value="{{ start_str or '' }}" type="date" class="input" />
+            </label>
+            <label class="field">
+                <span class="field-label">End</span>
+                <input name="end" value="{{ end_str or '' }}" type="date" class="input" />
+            </label>
 
-        <!-- search by name -->
-        <label class="field">
-            <span class="field-label">Name</span>
-            <input name="search_name" value="{{ search_name or '' }}" type="text" class="input"
-                placeholder="search by name..." />
-        </label>
+            <!-- search by name -->
+            <label class="field">
+                <span class="field-label">Name</span>
+                <input name="search_name" value="{{ search_name or '' }}" type="text" class="input"
+                    placeholder="search by name..." />
+            </label>
 
-        <label class="field field-wide">
-            <span class="field-label">Tests</span>
-            <select name="category" class="input">
-                <option value="">All</option>
+            <label class="field field-wide">
+                <span class="field-label">Tests</span>
+                <select name="category" class="input">
+                    <option value="">All</option>
 
-                {% for c in categories %}
-                <option value="{{ c.name }}" {% if selected_category==c.name %} selected {% endif %}>{{ c.name }}
-                </option>
-                {% endfor %}
+                    {% for c in categories %}
+                    <option value="{{ c.name }}" {% if selected_category==c.name %} selected {% endif %}>{{ c.name }}
+                    </option>
+                    {% endfor %}
 
-            </select>
-        </label>
-        <div class="filters-actions">
-            <button class="btn btn-primary" type="submit">
-                Apply
-            </button>
-            <a class="btn btn-secondary" href="{{ url_for('main.data') }}">
-                Reset
-            </a>
+                </select>
+            </label>
         </div>
+
+        <div class="testing">
+            <div class="checkboxs">
+                <div>
+                    <label class="field field-checkbox">
+                        <input type="checkbox" name="show_outstanding" value="1" {% if show_outstanding %}checked{%
+                            endif %} />
+                        <span class="field-label">Owes money (outstanding)</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="field field-checkbox">
+                        <input type="checkbox" name="show_overpaid" value="1" {% if show_overpaid %}checked{% endif
+                            %} />
+                        <span class="field-label">We owe them (overpaid)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filters-actions">
+                <button class="btn btn-primary" type="submit">
+                    Apply
+                </button>
+                <a class="btn btn-secondary" href="{{ url_for('main.data') }}">
+                    Reset
+                </a>
+            </div>
+        </div>
+
     </form>
 
 
@@ -55,7 +79,7 @@
     <!-- Export link -->
     <div class="export-line">
         <a class="export-link"
-            href="{{ url_for('main.export_csv', start=start_str, end=end_str, category=selected_category) }}">
+            href="{{ url_for('main.export_csv', start=start_str, end=end_str, category=selected_category, search_name=search_name, show_outstanding=1 if show_outstanding else None, show_overpaid=1 if show_overpaid else None) }}">
             Export CSV (current filter)
         </a>
     </div>
@@ -122,7 +146,8 @@
                     <th class="text-right">Price</th>
                     <th class="text-right">Paid Amount</th>
                     <th class="text-right">Remain Amount</th>
-                    <th></th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>

@@ -17,6 +17,8 @@ def data():
     start_date = parse_date_or_none(start_str)
     end_date = parse_date_or_none(end_str)
     search_name = (request.args.get("search_name") or "").strip()  # search by name
+    show_outstanding = request.args.get("show_outstanding") == "1"  # الي عليهم مصاري
+    show_overpaid = request.args.get("show_overpaid") == "1"  # الي بدهم مصاري
     #
     if start_date and end_date and end_date < start_date:
         flash("End date can't be earlier than start date", "error")
@@ -35,6 +37,12 @@ def data():
 
     if search_name:  # Name search (case-insensitive and partial)
         q = q.filter(Expense.name.ilike(f"%{search_name}%"))
+    if show_outstanding and show_overpaid:
+        q = q.filter(Expense.remain_amount != 0)
+    elif show_outstanding:
+        q = q.filter(Expense.remain_amount < 0)
+    elif show_overpaid:
+        q = q.filter(Expense.remain_amount > 0)
 
     # pulling the data from the db
     expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all()
@@ -54,4 +62,6 @@ def data():
         end_str=end_str,
         selected_category=selected_category,
         search_name=search_name,
+        show_outstanding=show_outstanding,
+        show_overpaid=show_overpaid,
         ) # sending the data to the front-end

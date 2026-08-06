@@ -13,6 +13,9 @@ def export_csv():
     start_str = (request.args.get("start") or "").strip()
     end_str = (request.args.get("end") or "").strip()
     selected_category = (request.args.get("category") or "").strip()
+    search_name = (request.args.get("search_name") or "").strip()
+    show_outstanding = request.args.get("show_outstanding") == "1"
+    show_overpaid = request.args.get("show_overpaid") == "1"
 
     start_date = parse_date_or_none(start_str)
     end_date = parse_date_or_none(end_str)
@@ -24,7 +27,15 @@ def export_csv():
     if end_date:
         q = q.filter(Expense.date <= end_date)
     if selected_category:
-        q = q.filter(Expense.category == selected_category)
+        q = q.filter(Expense.category.contains(selected_category))
+    if search_name:
+        q = q.filter(Expense.name.ilike(f"%{search_name}%"))
+    if show_outstanding and show_overpaid:
+        q = q.filter(Expense.remain_amount != 0)
+    elif show_outstanding:
+        q = q.filter(Expense.remain_amount < 0)
+    elif show_overpaid:
+        q = q.filter(Expense.remain_amount > 0)
 
     expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all()
 
