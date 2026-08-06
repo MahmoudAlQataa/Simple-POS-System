@@ -35,7 +35,7 @@
                         <td class="text-right">${{ '%.2f'|format(t.price) }}</td>
                         <td class="text-right">
 
-                            <form action="{{ url_for('delete_test', test_id=t.id) }}" method="POST"
+                            <form action="{{ url_for('main.delete_test', test_id=t.id) }}" method="POST"
                                 onsubmit="return confirm('Are you sure you want to delete?')">
                                 <button class="btn btn-danger btn-sm">
                                     Delete
@@ -64,7 +64,7 @@
     <!-- Add Test -->
     <section class="card">
         <h2 class="card-title">Add Test</h2>
-        <form method="post" action="{{ url_for('add_test') }}" class="add-form">
+        <form method="post" action="{{ url_for('main.add_test') }}" class="add-form">
             <label class="field">
                 <span class="field-label">Name</span>
                 <input name="name" placeholder="e.g., CBC" class="input" />

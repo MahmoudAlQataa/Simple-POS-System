@@ -16,7 +16,7 @@
   <!-- Add Expense -->
   <section class="card">
     <h2 class="card-title">Add Expense</h2>
-    <form method="post" action="{{url_for('add')}}" class="add-form">
+    <form method="post" action="{{url_for('main.add')}}" class="add-form">
       <div class="field-row">
         <label class="field">
           <span class="field-label">Name</span>
@@ -85,7 +85,7 @@
   <!-- Filters -->
   <section class="card card-filters">
     <h2 class="card-title">Filters</h2>
-    <form method="get" action="{{ url_for('index') }}" class="filters-form">
+    <form method="get" action="{{ url_for('main.index') }}" class="filters-form">
       <label class="field">
         <span class="field-label">Start</span>
         <input name="start" value="{{ start_str or '' }}" type="date" class="input" />
@@ -117,7 +117,7 @@
         <button class="btn btn-primary" type="submit">
           Apply
         </button>
-        <a class="btn btn-secondary" href="{{ url_for('index') }}">
+        <a class="btn btn-secondary" href="{{ url_for('main.index') }}">
           Reset
         </a>
       </div>
@@ -128,7 +128,7 @@
     <!-- Export link -->
     <div class="export-line">
       <a class="export-link"
-        href="{{ url_for('export_csv', start=start_str, end=end_str, category=selected_category) }}">
+        href="{{ url_for('main.export_csv', start=start_str, end=end_str, category=selected_category) }}">
         Export CSV (current filter)
       </a>
     </div>
@@ -200,7 +200,7 @@
           </td>
 
           <td class="text-right">
-            <form action="{{ url_for('delete', expense_id=e.id) }}" method="POST"
+            <form action="{{ url_for('main.delete', expense_id=e.id) }}" method="POST"
               onsubmit="return confirm('Are you sure you want to delete?')">
               <button class="btn btn-danger btn-sm">
                 Delete

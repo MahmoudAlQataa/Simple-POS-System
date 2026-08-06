@@ -19,11 +19,11 @@
       </a>
 
       <nav class="nav-links">
-        <a href="{{ url_for('index') }}"
+        <a href="{{ url_for('main.index') }}"
           class="nav-link {% if request.endpoint == 'index' %}nav-link-active{% endif %}">
           Dashboard
         </a>
-        <a href="{{ url_for('settings') }}"
+        <a href="{{ url_for('main.settings') }}"
           class="nav-link {% if request.endpoint == 'settings' %}nav-link-active{% endif %}">
           Settings
         </a>
