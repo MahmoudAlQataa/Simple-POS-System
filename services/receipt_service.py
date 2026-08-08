@@ -2,11 +2,9 @@ import os
 import pdfkit
 from flask import render_template
 from models.tests import Test
+import config
 
-# مسار wkhtmltopdf على جهاز Mahmoud
-WKHTMLTOPDF_PATH = r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe"
-
-PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
+PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=config.WKHTMLTOPDF_PATH)
 
 PDFKIT_OPTIONS = {
     'encoding': 'UTF-8',
@@ -49,7 +47,7 @@ def _get_receipt_path(expense):
     year = expense.date.year
     month = expense.date.month
 
-    folder = os.path.join("instance", "reports", str(year), str(month))
+    folder = os.path.join(config.REPORTS_DIR, str(year), str(month))
     os.makedirs(folder, exist_ok=True)
 
     filename = f"receipt_{expense.id}.pdf"

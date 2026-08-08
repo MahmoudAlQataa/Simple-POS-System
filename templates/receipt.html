@@ -236,7 +236,7 @@
                 <td><span>Receipt No:</span> {{ expense.id }}</td>
             </tr>
             <tr>
-                <td class="right-cell"><span>Phone:</span> {{ expense.phone or '' }}</td>
+                <td class="right-cell"><span>Phone:</span> 0{{ expense.phone or '' }}</td>
                 <td><span>Date:</span> {{ expense.date.strftime('%d/%m/%Y') }}</td>
             </tr>
         </table>
