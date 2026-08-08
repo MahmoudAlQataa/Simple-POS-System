@@ -50,3 +50,6 @@ htmlcov/
 
 # notes
 notes.txt
+
+# test file
+test.*

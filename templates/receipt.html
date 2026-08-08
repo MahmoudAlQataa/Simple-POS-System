@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Receipt Voucher</title>
+    <style>
+        /* =========================
+       Laboratory Payment Receipt
+       ========================= */
+
+
+        .receipt {
+            width: 760px;
+            margin: 30px auto;
+            padding: 35px 40px;
+            background: #fff;
+            border: 1px solid #cfcfcf;
+            font-family: Arial, "Segoe UI", sans-serif;
+            color: #222;
+            box-sizing: border-box;
+        }
+
+        /* ---------- Header ---------- */
+
+        .receipt-header-table {
+            width: 100%;
+            border-collapse: collapse;
+            padding-bottom: 20px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid #222;
+        }
+
+        .receipt-header-table td {
+            vertical-align: top;
+            padding: 0;
+            border: none;
+        }
+
+        .lab-info h2 {
+            margin: 0 0 6px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .lab-info p {
+            margin: 3px 0;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .receipt-title {
+            text-align: right;
+        }
+
+        .receipt-title h1 {
+            margin: 0;
+            font-size: 27px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .receipt-title span {
+            display: block;
+            margin-top: 5px;
+            font-size: 10px;
+            color: #777;
+            letter-spacing: 1px;
+        }
+
+
+        /* ---------- Patient Information ---------- */
+
+        .patient-info {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #aaa;
+            margin-bottom: 20px;
+        }
+
+        .patient-info td {
+            padding: 10px 13px;
+            font-size: 13px;
+            border-bottom: 1px solid #aaa;
+            width: 50%;
+        }
+
+        .patient-info td.right-cell {
+            border-right: 1px solid #aaa;
+        }
+
+        .patient-info tr:last-child td {
+            border-bottom: none;
+        }
+
+        .patient-info span {
+            font-weight: 700;
+            margin-right: 7px;
+        }
+
+
+        /* ---------- Tests Table ---------- */
+
+        .tests-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+        }
+
+        .tests-table th {
+            padding: 11px 12px;
+            background: #f1f1f1;
+            border: 1px solid #999;
+            font-size: 12px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .tests-table td {
+            padding: 10px 12px;
+            border: 1px solid #aaa;
+            font-size: 13px;
+        }
+
+        .tests-table th:last-child,
+        .tests-table td:last-child {
+            width: 120px;
+            text-align: right;
+        }
+
+        .tests-table .test-number {
+            width: 45px;
+            text-align: center;
+        }
+
+
+        /* ---------- Payment Summary ---------- */
+
+        .payment-section-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .payment-section-table td {
+            border: none;
+            padding: 0;
+        }
+
+        .payment-summary {
+            width: 300px;
+            border: 1px solid #999;
+            border-collapse: collapse;
+            float: right;
+        }
+
+        .payment-row td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #ccc;
+            font-size: 13px;
+        }
+
+        .payment-row:last-child td {
+            border-bottom: none;
+        }
+
+        .payment-row td:last-child {
+            text-align: right;
+        }
+
+        .payment-row.total td {
+            font-weight: 700;
+            font-size: 14px;
+            border-top: 1px solid #222;
+        }
+
+        .payment-row.paid td {
+            font-weight: 700;
+        }
+
+
+        /* ---------- Signatures ---------- */
+
+        .receipt-footer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 45px;
+        }
+
+        .receipt-footer-table td {
+            width: 50%;
+            padding: 0 40px;
+            border: none;
+        }
+
+        .signature {
+            text-align: center;
+            padding-top: 12px;
+            border-top: 1px solid #333;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =========================
+     LAB RECEIPT
+     ========================= -->
+
+    <div class="receipt">
+
+        <!-- Header -->
+        <!-- <table class="receipt-header-table">
+            <tr>
+                <td class="lab-info">
+                    <h2>AL-SHIFA MEDICAL LAB</h2>
+                    <p>Medical Laboratory &amp; Diagnostic Services</p>
+                    <p>Tel: +970 599 000 000</p>
+                </td>
+                <td class="receipt-title">
+                    <h1>Receipt</h1>
+                    <span>PAYMENT RECEIPT</span>
+                </td>
+            </tr>
+        </table> -->
+
+
+        <!-- Patient Information -->
+        <table class="patient-info">
+            <tr>
+                <td class="right-cell"><span>Patient Name:</span> {{ expense.name }}</td>
+                <td><span>Receipt No:</span> {{ expense.id }}</td>
+            </tr>
+            <tr>
+                <td class="right-cell"><span>Phone:</span> {{ expense.phone or '' }}</td>
+                <td><span>Date:</span> {{ expense.date.strftime('%d/%m/%Y') }}</td>
+            </tr>
+        </table>
+
+
+        <!-- Tests -->
+        <table class="tests-table">
+
+            <thead>
+                <tr>
+                    <th class="test-number">#</th>
+                    <th>Test Name</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for test in tests_list %}
+                <tr>
+                    <td class="test-number">{{ loop.index }}</td>
+                    <td>{{ test.name }}</td>
+                    <td>${{ "%.2f"|format(test.price) }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <!-- Payment Summary -->
+        <table class="payment-section-table">
+            <tr>
+                <td>
+                    <table class="payment-summary">
+                        <tr class="payment-row">
+                            <td>Total</td>
+                            <td>${{ "%.2f"|format(expense.price) }}</td>
+                        </tr>
+                        <tr class="payment-row">
+                            <td>Discount</td>
+                            <td>${{ "%.2f"|format(expense.discount) }}</td>
+                        </tr>
+                        <tr class="payment-row total">
+                            <td>Net Total</td>
+                            <td>${{ "%.2f"|format(expense.price - expense.discount) }}</td>
+                        </tr>
+                        <tr class="payment-row paid">
+                            <td>Paid</td>
+                            <td>${{ "%.2f"|format(expense.paid_amount) }}</td>
+                        </tr>
+                        <tr class="payment-row">
+                            <td>Remaining</td>
+                            <td>
+                                ${{ "%.2f"|format(expense.remain_amount|abs) }}
+                                {% if expense.remain_amount < 0 %} (عليه) {% elif expense.remain_amount> 0 %}
+                                    (له)
+                                    {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+        <!-- Signatures -->
+        <table class="receipt-footer-table">
+            <tr>
+                <td class="signature">Received By</td>
+                <td class="signature">Authorized Signature</td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+
+</html>

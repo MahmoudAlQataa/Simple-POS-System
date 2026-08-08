@@ -13,3 +13,4 @@ from routes import add_test  # noqa: E402,F401
 from routes import delete_test  # noqa: E402,F401
 from routes import export  # noqa: E402,F401
 from routes import data  # noqa: E402,F401
+from routes import receipt  # noqa: E402,F401

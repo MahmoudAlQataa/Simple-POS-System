@@ -137,6 +137,7 @@
           <th class="text-right">Discount</th>
           <th class="text-right">Paid Amount</th>
           <th class="text-right">Remain Amount</th>
+          <th>Receipt</th>
           <th>Edit</th>
           <th>Delete</th>
         </tr>
@@ -157,14 +158,23 @@
           <td class="text-right">${{ '%.2f'|format(e.discount) }}</td>
           <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>
           <td class="text-right">${{ '%.2f'|format(e.remain_amount) }}</td>
-          <td class="text-right">
 
-            <!-- 🆕 زر Edit -->
+          <td class="text-right">
+            <form action="{{ url_for('main.open_receipt_route', expense_id=e.id) }}" method="POST">
+              <button class="btn btn-secondary btn-sm">
+                Receipt
+              </button>
+            </form>
+          </td>
+          
+          <!-- 🆕 زر Edit -->
+          <td class="text-right">
             <button type="button" class="btn btn-edit"
               onclick="openEditModal({{ e.id }}, '{{ e.name|e }}', '{{ e.phone|e }}', {{ e.paid_amount }}, {{ e.discount }})">
               Edit
             </button>
           </td>
+
 
           <td class="text-right">
             <form action="{{ url_for('main.delete', expense_id=e.id) }}" method="POST"
@@ -181,7 +191,7 @@
         {% else %} <!-- the else -->
 
         <tr>
-          <td colspan="10" class="empty-row">
+          <td colspan="11" class="empty-row">
             No expenses yet — add your first one above.
           </td>
         </tr>

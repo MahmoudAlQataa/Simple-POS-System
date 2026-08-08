@@ -4,6 +4,7 @@ from datetime import date, datetime
 from routes import main_bp
 from extensions import db
 from models import Expense
+from services.receipt_service import generate_receipt
 
 
 # add route
@@ -37,7 +38,7 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
     try:
         d = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else date.today()
     except ValueError:
-        d = date.today
+        d = date.today()
     #
     try:
         discount = float(discount_str) if discount_str else 0.0
@@ -61,6 +62,8 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
     e = Expense(name=name, phone=phone, price=price, discount=discount, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
     db.session.add(e)
     db.session.commit()
+
+    generate_receipt(e)
 
     flash("Expense added", "success")
     print(f" * Form Received : {dict(request.form)}")

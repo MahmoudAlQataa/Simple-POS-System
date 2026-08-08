@@ -1,8 +1,9 @@
-from flask import request, url_for, redirect
+from flask import request, url_for, redirect, flash
 
 from routes import main_bp
 from extensions import db
 from models import Expense
+from services.receipt_service import generate_receipt
 
 
 @main_bp.route("/edit/<int:id>", methods=["POST"])
@@ -37,6 +38,12 @@ def edit_expense(id):
     expense.remain_amount = paid_amount - (expense.price - discount)  # Server account, not from the form
 
     db.session.commit()
+    
+    try:
+        generate_receipt(expense)
+    except RuntimeError as ex:
+        flash(str(ex), "error")
+    
     if request.referrer:
             return redirect(request.referrer)  # Redirect back to the previous page
     # return redirect(url_for("main.index"))
