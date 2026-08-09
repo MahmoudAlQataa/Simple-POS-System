@@ -3,7 +3,7 @@ from datetime import date, datetime
 
 from routes import main_bp
 from extensions import db
-from models import Expense
+from models import Expense, Test
 from services.receipt_service import generate_receipt
 
 
@@ -21,7 +21,7 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
     date_str = (request.form.get("date") or "").strip()
 
     # making sure that the user enter the full data
-    if not name or not paid_amount_str or not price_str or not category:
+    if not name or not paid_amount_str or not category:
         flash("please Fill the Missing Data", "error")  # the error massage
         return redirect(url_for("main.index"))
 
@@ -40,17 +40,31 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
     except ValueError:
         d = date.today()
     #
+    # Recalculate the price server-side based on the actual analysis names (category)
+    # Never trust the price_str value sent from the form
+    test_names = [t.strip() for t in category.split(",") if t.strip()]
+    all_tests = {t.name: t.price for t in Test.query.all()}
+
+    price = 0.0
+    for tn in test_names:
+        if tn not in all_tests:
+            flash(f"Unknown test: {tn}", "error")
+            return redirect(url_for("main.index"))
+        price += all_tests[tn]
+
     try:
         discount = float(discount_str) if discount_str else 0.0
     except ValueError:
         flash("Invalid discount value", "error")
         return redirect(url_for("main.index"))
-    try:
-        price = float(price_str) if price_str else 0.0
-        remain_amount = paid_amount - (price - discount)
-    except ValueError:
-        flash("Invalid price value", "error")
-        return redirect(url_for("main.index"))
+
+    # The discount must not exceed the price actually calculated by the server.
+    if discount > price:
+        discount = price
+    if discount < 0:
+        discount = 0.0
+
+    remain_amount = paid_amount - (price - discount)
 
     try:
         phone = int(phone_str) if price_str else 0000000000
