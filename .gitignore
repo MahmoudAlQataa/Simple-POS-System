@@ -54,3 +54,6 @@ notes.txt
 # test file
 test.*
 */test.*
+
+# setup file
+setup.iss
