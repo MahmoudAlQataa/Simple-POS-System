@@ -134,6 +134,11 @@
 <section class="card table-card">
     <div class="table-card-header">
         <h2 class="card-title">All Expenses</h2>
+
+        <!-- Quick instant search (client-side, doesn't touch the filter form) -->
+        <div class="quick-search">
+            <input type="text" id="quickNameSearch" class="input" placeholder="Quick search by name..." />
+        </div>
     </div>
     <div class="table-scroll">
         <table class="expenses-table">
@@ -168,7 +173,7 @@
                     <td class="text-right">${{ '%.2f'|format(e.discount) }}</td> <!-- formating for 2 digets , -->
                     <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>
                     <td class="text-right">${{ '%.2f'|format(e.remain_amount) }}</td>
-                    
+
                     <td class="text-right">
                         <form action="{{ url_for('main.open_receipt_route', expense_id=e.id) }}" method="POST">
                             <button class="btn btn-secondary btn-sm">
@@ -248,5 +253,24 @@
     </div>
 </section>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("quickNameSearch");
+        const rows = document.querySelectorAll(".expenses-table tbody tr");
+
+        input.addEventListener("input", function () {
+            const term = input.value.trim().toLowerCase();
+
+            rows.forEach(function (row) {
+                const nameCell = row.querySelector("td:nth-child(2)");
+                if (!nameCell) return; // safety for the "no expenses" empty row
+
+                const name = nameCell.textContent.trim().toLowerCase();
+                row.style.display = name.includes(term) ? "" : "none";
+            });
+        });
+    });
+</script>
 
 {% endblock %}
