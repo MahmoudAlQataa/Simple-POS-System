@@ -1,8 +1,8 @@
-"""initial migration
+"""initial schema with gender and doctor_name
 
-Revision ID: 0665bd012fc6
+Revision ID: 541126320b95
 Revises: 
-Create Date: 2026-08-07 18:40:35.025206
+Create Date: 2026-08-11 19:34:03.673340
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0665bd012fc6'
+revision = '541126320b95'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,13 +21,15 @@ def upgrade():
     op.create_table('expense',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
-    sa.Column('phone', sa.Integer(), nullable=False),
+    sa.Column('phone', sa.String(length=20), nullable=True),
     sa.Column('price', sa.Float(), nullable=False),
     sa.Column('discount', sa.Float(), nullable=False),
     sa.Column('paid_amount', sa.Float(), nullable=False),
     sa.Column('remain_amount', sa.Float(), nullable=False),
     sa.Column('category', sa.String(length=50), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('gender', sa.String(length=10), nullable=False),
+    sa.Column('doctor_name', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('test',

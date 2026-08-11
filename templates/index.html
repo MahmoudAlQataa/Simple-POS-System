@@ -18,11 +18,11 @@
       <div class="field-row">
         <label class="field">
           <span class="field-label">Name</span>
-          <input name="name" placeholder="e.g., Ahmed" class="input" required />
+          <input name="name" type="text" placeholder="e.g., Ahmed" class="input" required />
         </label>
         <label class="field">
           <span class="field-label">Phone</span>
-          <input name="phone" type="number" placeholder="05********" class="input" required />
+          <input name="phone" type="number" placeholder="05********" class="input" />
         </label>
         <label class="field">
           <span class="field-label">Price</span>
@@ -31,8 +31,8 @@
         </label>
         <label class="field">
           <span class="field-label">Paid Amount</span>
-          <input name="paid_amount" id="paid_amount" type="number" step="0.01" min="0.01" placeholder="25.00"
-            class="input" required />
+          <input name="paid_amount" id="paid_amount" type="number" step="0.01" min="0.00" placeholder="25.00"
+            class="input" />
         </label>
         <label class="field">
           <span class="field-label">Discount</span>
@@ -40,8 +40,20 @@
         </label>
         <label class="field">
           <span class="field-label">Remain Amount</span>
-          <input name="remain_amount" id="remain_amount" type="number" step="0.01" min="0.01" placeholder="00.00"
+          <input name="remain_amount" id="remain_amount" type="number" step="0.01" min="0.00" placeholder="00.00"
             class="input input-readonly" readonly />
+        </label>
+        <label class="field">
+          <span class="field-label">Doctor Name</span>
+          <input name="doctor_name" type="text" placeholder="e.g., D.Adam" class="input" />
+        </label>
+        <label class="field">
+          <span class="field-label">Gender</span>
+          <select name="gender" id="gender" class="input" required>
+            <option value="" disabled selected>Select Gender ...</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
         </label>
         <label class="field">
           <span class="field-label">Date</span>
@@ -137,6 +149,8 @@
           <th class="text-right">Discount</th>
           <th class="text-right">Paid Amount</th>
           <th class="text-right">Remain Amount</th>
+          <th class="text-right">Gender</th>
+          <th class="text-right">Doctor</th>
           <th>Receipt</th>
           <th>Edit</th>
           <th>Delete</th>
@@ -152,12 +166,14 @@
           <!-- looping in the data -->
           <td>{{ e.date.strftime("%Y-%m-%d") if e.date else '' }}</td>
           <td>{{ e.name }}</td>
-          <td>0{{ e.phone }}</td>
+          <td>{{ e.phone if e.phone else '-' }}</td>
           <td>{{ e.category }}</td>
           <td class="text-right">${{ '%.2f'|format(e.price) }}</td> <!-- formating for 2 digets , -->
           <td class="text-right">${{ '%.2f'|format(e.discount) }}</td>
           <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>
           <td class="text-right">${{ '%.2f'|format(e.remain_amount) }}</td>
+          <td>{{ e.gender }}</td>
+          <td>{{ e.doctor_name if e.doctor_name else '-' }}</td>
 
           <td class="text-right">
             <form action="{{ url_for('main.open_receipt_route', expense_id=e.id) }}" method="POST">
@@ -166,11 +182,11 @@
               </button>
             </form>
           </td>
-          
+
           <!-- 🆕 زر Edit -->
           <td class="text-right">
             <button type="button" class="btn btn-edit"
-              onclick="openEditModal({{ e.id }}, '{{ e.name|e }}', '{{ e.phone|e }}', {{ e.paid_amount }}, {{ e.discount }})">
+              onclick="openEditModal({{ e.id }}, '{{ e.name|e }}', '{{ e.phone or ''|e }}', {{ e.paid_amount }}, {{ e.discount }}, '{{ e.gender|e }}', '{{ e.doctor_name or ''|e }}')">
               Edit
             </button>
           </td>
@@ -191,7 +207,7 @@
         {% else %} <!-- the else -->
 
         <tr>
-          <td colspan="11" class="empty-row">
+          <td colspan="13" class="empty-row">
             No expenses yet — add your first one above.
           </td>
         </tr>
@@ -214,6 +230,19 @@
           <label class="field">
             <span class="field-label">Phone</span>
             <input type="text" name="phone" id="edit_phone" class="input" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Doctor Name</span>
+            <input type="text" name="doctor_name" id="edit_doctor_name" class="input" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Gender</span>
+            <select name="gender" id="edit_gender" class="input" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
           </label>
 
           <label class="field">

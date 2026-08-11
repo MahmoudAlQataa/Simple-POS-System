@@ -83,7 +83,7 @@
             padding: 10px 13px;
             font-size: 13px;
             border-bottom: 1px solid #aaa;
-            width: 50%;
+            width: 33.33%;
         }
 
         .patient-info td.right-cell {
@@ -231,12 +231,14 @@
 
         <!-- Patient Information -->
         <table class="patient-info">
-            <tr>
+            <tr> <!-- new -->
                 <td class="right-cell"><span>Patient Name:</span> {{ expense.name }}</td>
+                <td class="right-cell"><span>Gender:</span> {{ expense.gender }}</td>
                 <td><span>Receipt No:</span> {{ expense.id }}</td>
             </tr>
             <tr>
-                <td class="right-cell"><span>Phone:</span> 0{{ expense.phone or '' }}</td>
+                <td class="right-cell"><span>Phone:</span> {{ expense.phone or '' }}</td>
+                <td class="right-cell"><span>Doctor Name:</span> {{ expense.doctor_name or '' }}</td>
                 <td><span>Date:</span> {{ expense.date.strftime('%d/%m/%Y') }}</td>
             </tr>
         </table>

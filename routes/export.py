@@ -43,15 +43,18 @@ def export_csv():
     output = io.StringIO()
     writer = csv.writer(output)
 
-    writer.writerow(["date", "name", "phone", "category", "price", "paid_amount", "remain_amount"])  # header row
+    writer.writerow(["date", "name", "phone", "gender", "doctor_name", "category", "price", "discount", "paid_amount", "remain_amount"])  # header row
 
     for e in expenses:  # data rows
         writer.writerow([
             e.date.isoformat(),
             e.name,
-            e.phone,
+            e.phone or "",
+            e.gender,
+            e.doctor_name or "",
             e.category,         # csv.writer automatically adds quotes if there are commas.
             f"{e.price:.2f}",
+            f"{e.discount:.2f}",
             f"{e.paid_amount:.2f}",
             f"{e.remain_amount:.2f}",
         ])

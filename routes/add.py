@@ -19,19 +19,21 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
     remain_amount_str = (request.form.get("remain_amount") or "").strip()
     category = (request.form.get("category") or "").strip()
     date_str = (request.form.get("date") or "").strip()
+    gender = (request.form.get("gender") or "").strip()
+    doctor_name = (request.form.get("doctor_name") or "").strip() or None
 
     # making sure that the user enter the full data
-    if not name or not paid_amount_str or not category:
+    if not name or not category:
         flash("please Fill the Missing Data", "error")  # the error massage
         return redirect(url_for("main.index"))
 
     # making sure the user entered a valid num (+num)
     try:
-        paid_amount = float(paid_amount_str)
-        if paid_amount <= 0:
+        paid_amount = float(paid_amount_str) if paid_amount_str else 0.0
+        if paid_amount < 0:
             raise ValueError  # calling the error massage
     except ValueError:
-        flash("Amount Must be a Positive Number", "error")
+        flash("Amount Must be Zero or Positive", "error")
         return redirect(url_for("main.index"))
 
     # try to make the date in the right format
@@ -65,15 +67,27 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
         discount = 0.0
 
     remain_amount = paid_amount - (price - discount)
-
-    try:
-        phone = int(phone_str) if price_str else 0000000000
-    except ValueError:
-        flash("Invalid phone value", "error")
+    phone = phone_str if phone_str else None
+    
+    # Validation: Check the value against the allowed options (protection against tampering)
+    if gender not in ("Male", "Female"):
+        flash("Please select a valid gender", "error")
         return redirect(url_for("main.index"))
 
     # adding the data into the database
-    e = Expense(name=name, phone=phone, price=price, discount=discount, paid_amount=paid_amount, remain_amount=remain_amount, category=category, date=d)
+    e = Expense(
+        name=name, 
+        phone=phone, 
+        price=price, 
+        discount=discount, 
+        paid_amount=paid_amount, 
+        remain_amount=remain_amount, 
+        category=category, 
+        date=d,
+        gender=gender,
+        doctor_name=doctor_name,
+        )
+    
     db.session.add(e)
     db.session.commit()
 

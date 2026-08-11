@@ -105,7 +105,7 @@ function updateSelection() {
 });
 
 
-function openEditModal(id, name, phone, paidAmount, discount) {
+function openEditModal(id, name, phone, paidAmount, discount, gender, doctorName) {
   const modal = document.getElementById("editModal");
   const form = document.getElementById("editForm");
 
@@ -114,6 +114,8 @@ function openEditModal(id, name, phone, paidAmount, discount) {
   document.getElementById("edit_phone").value = phone;
   document.getElementById("edit_paid_amount").value = paidAmount;
   document.getElementById("edit_discount").value = discount;
+  document.getElementById("edit_gender").value = gender;
+  document.getElementById("edit_doctor_name").value = doctorName || "";
 
   // We specify where the form will be sent (the ID of the selected row).
   form.action = `/edit/${id}`;
