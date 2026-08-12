@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Bils · POS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Bils</h1>
+<p class="page-subtitle">
+  Add Bils and See what you Buying today, and visualize instantly.
+</p>
+
+<!-- Add form -->
+<div class="grid-layout">
+
+  <!-- Add Bils -->
+  <section class="card">
+    <h2 class="card-title">Add Bils</h2>
+    <form method="post" action="{{ url_for('main.add_bil') }}" class="add-form">
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">Category</span>
+          <input name="category" type="text" placeholder="" class="input" required />
+        </label>
+        <label class="field">
+          <span class="field-label">Campany</span>
+          <input name="campany" type="text" placeholder="" class="input" required />
+        </label>
+        <label class="field">
+          <span class="field-label">Price</span>
+          <input name="price" id="price" type="number" step="0.01" min="0.01" placeholder="0.0" class="input"
+            required />
+        </label>
+        <label class="field">
+          <span class="field-label">Paid Amount</span>
+          <input name="paid_amount" id="paid_amount" type="number" step="0.01" min="0.00" placeholder=""
+            class="input" />
+        </label>
+        <label class="field">
+          <span class="field-label">Date</span>
+          <input name="date" type="date" value="{{ today }}" class="input" />
+        </label>
+      </div>
+
+      <button class="btn btn-primary btn-add-expense" type="submit">
+        Add Expense
+      </button>
+
+    </form>
+  </section>
+</div>
+
+<!-- Filters (لسا مش مفعّلة سيرفرياً - رح نرجعها بخطوة الفلتر) -->
+<!--
+<section class="card card-filters">
+  ...
+</section>
+-->
+
+<!-- Totals (لسا مش محسوبة - رح نرجعها بعد الفلتر) -->
+<!--
+<div class="field-row4">
+  ...
+</div>
+-->
+
+<!-- Bils table -->
+<section class="card table-card">
+  <div class="table-card-header">
+    <h2 class="card-title">All Bils</h2>
+  </div>
+  <div class="table-scroll">
+    <table class="expenses-table">
+      <thead>
+        <tr>
+          <th class="text-left">Date</th>
+          <th class="text-left">Category</th>
+          <th class="text-left">Campany</th>
+          <th class="text-right">Price</th>
+          <th class="text-right">Paid Amount</th>
+          <th class="text-right">Remain Amount</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% if bils %}
+        {% for b in bils %}
+
+        <tr>
+          <td>{{ b.bil_date.strftime("%Y-%m-%d") if b.bil_date else '' }}</td>
+          <td>{{ b.bil_category }}</td>
+          <td>{{ b.campany }}</td>
+          <td class="text-right">${{ '%.2f'|format(b.bil_price) }}</td>
+          <td class="text-right">${{ '%.2f'|format(b.bil_paid_amount) }}</td>
+          <td class="text-right">${{ '%.2f'|format(b.bil_remain_amount) }}</td>
+
+          <td class="text-right">
+            <button type="button" class="btn btn-secondary btn-sm"
+              onclick="openEditBilModal({{ b.bil_id }}, '{{ b.bil_category }}', '{{ b.campany }}', {{ b.bil_price }}, {{ b.bil_paid_amount }})">
+              Edit
+            </button>
+          </td>
+
+          <td class="text-right">
+            <form action="{{ url_for('main.delete_bil', bil_id=b.bil_id) }}" method="POST"
+              onsubmit="return confirm('Are you sure you want to delete?')">
+              <button class="btn btn-danger btn-sm">
+                Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+
+        {% endfor %}
+        {% else %}
+
+        <tr>
+          <td colspan="8" class="empty-row">
+            No bils yet — add your first one above.
+          </td>
+        </tr>
+
+        {% endif %}
+
+      </tbody>
+    </table>
+
+    <!-- Modal التعديل -->
+    <div id="editBilModal" class="modal-overlay" style="display:none;">
+      <div class="modal-box">
+        <h3>Edit Bil</h3>
+        <form id="editBilForm" method="post" action="">
+          <label class="field">
+            <span class="field-label">Category</span>
+            <input type="text" name="category" id="edit_bil_category" class="input" required />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Campany</span>
+            <input type="text" name="campany" id="edit_bil_campany" class="input" required />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Price</span>
+            <input type="number" step="0.01" min="0.01" name="price" id="edit_bil_price" class="input" required />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Paid Amount</span>
+            <input type="number" step="0.01" min="0.00" name="paid_amount" id="edit_bil_paid_amount" class="input" />
+          </label>
+
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" onclick="closeEditBilModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  function openEditBilModal(id, category, campany, price, paidAmount) {
+    document.getElementById("edit_bil_category").value = category;
+    document.getElementById("edit_bil_campany").value = campany;
+    document.getElementById("edit_bil_price").value = price;
+    document.getElementById("edit_bil_paid_amount").value = paidAmount;
+
+    document.getElementById("editBilForm").action = "/bils/edit/" + id;
+    document.getElementById("editBilModal").style.display = "flex";
+  }
+
+  function closeEditBilModal() {
+    document.getElementById("editBilModal").style.display = "none";
+  }
+</script>
+
+{% endblock %}

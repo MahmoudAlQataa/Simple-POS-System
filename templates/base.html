@@ -28,6 +28,10 @@
           class="nav-link {% if request.endpoint == 'main.data' %}nav-link-active{% endif %}">
           Data
         </a>
+        <a href="{{ url_for('main.bils') }}"
+          class="nav-link {% if request.endpoint == 'main.bils' %}nav-link-active{% endif %}">
+          Bils
+        </a>
         <a href="{{ url_for('main.settings') }}"
           class="nav-link {% if request.endpoint == 'main.settings' %}nav-link-active{% endif %}">
           Settings
