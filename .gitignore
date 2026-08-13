@@ -57,3 +57,6 @@ test.*
 
 # setup file
 setup.iss
+
+# app icon
+AppIcon.ico
