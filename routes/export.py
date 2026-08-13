@@ -1,14 +1,16 @@
-from flask import request, Response
+from flask import request, redirect, flash
 import csv
 import io
+import os
 
 from routes import main_bp
 from models import Expense
 from services import parse_date_or_none
+import config
 
 
 # export route
-@main_bp.route("/export.csv")
+@main_bp.route("/export.csv", methods=["POST"])
 def export_csv():
     start_str = (request.args.get("start") or "").strip()
     end_str = (request.args.get("end") or "").strip()
@@ -65,10 +67,16 @@ def export_csv():
     fname_end = end_str or "all"
     filename = f"expenses_{fname_start}_to_{fname_end}.csv"
 
-    return Response(
-        csv_data,
-        headers={
-            "Content-Type": "text/csv",
-            "Content-Disposition": f"attachment; filename={filename}",
-        }
-    )
+    os.makedirs(config.EXPORTS_DIR, exist_ok=True)
+    path = os.path.join(config.EXPORTS_DIR, filename)
+
+    # utf-8-sig عشان الإكسل يقرأ العربي صح لو الملف فيه نص عربي
+    with open(path, "w", newline="", encoding="utf-8-sig") as f:
+        f.write(csv_data)
+
+    os.startfile(path)
+
+    flash("تم تصدير الملف وفتحه بنجاح", "success")
+    if request.referrer:
+        return redirect(request.referrer)
+    return redirect("/")

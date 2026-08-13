@@ -78,10 +78,11 @@
 
     <!-- Export link -->
     <div class="export-line">
-        <a class="export-link"
-            href="{{ url_for('main.export_csv', start=start_str, end=end_str, category=selected_category, search_name=search_name, show_outstanding=1 if show_outstanding else None, show_overpaid=1 if show_overpaid else None) }}">
-            Export CSV (current filter)
-        </a>
+        <form method="POST"
+            action="{{ url_for('main.export_csv', start=start_str, end=end_str, category=selected_category, search_name=search_name, show_outstanding=1 if show_outstanding else None, show_overpaid=1 if show_overpaid else None) }}"
+            style="display:inline;">
+            <button type="submit" class="export-link">Export CSV (current filter)</button>
+        </form>
     </div>
 
     <!-- Total -->
