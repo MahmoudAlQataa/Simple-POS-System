@@ -29,6 +29,8 @@ A local-first point-of-sale / expense tracking system: no internet dependency, n
 - CSV export respecting all active filters
 - Printable PDF receipts per transaction (RTL Arabic support), auto-filed under `instance/reports/<year>/<month>/`
 - Runs as a native Windows desktop app (no browser required)
+- Separate module for tracking incoming bills/invoices from suppliers (company name, category, amount, paid/remaining balance), with its own filtered list view and printable PDF receipts
+- Automatic local database backup on each app launch
 
 ## 📂 Project Structure
 
@@ -39,10 +41,10 @@ A local-first point-of-sale / expense tracking system: no internet dependency, n
     ├── launcher.py            # Desktop entry point (Flask thread + pywebview window)
     ├── bin/                   # Bundled wkhtmltopdf.exe + dependencies
     ├── migrations/            # Flask-Migrate schema history
-    ├── models/                # Expense, Test
-    ├── routes/                # index, add, edit, delete, data, settings, export, receipt
-    ├── services/              # item lookup, date parsing, receipt generation, port selection
-    ├── templates/             # base, index, data, settings, receipt
+    ├── models/                # Expense, Test, Bils
+    ├── routes/                # index, add, edit, delete, data, settings, export, receipt, bils
+    ├── services/              # item lookup, date parsing, receipt generation, port selection, backup
+    ├── templates/             # base, index, data, settings, receipt, bils
     └── static/
         ├── css/               # theme.css (variables) + style.css (layout/components)
         └── js/
