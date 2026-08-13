@@ -4,6 +4,7 @@ from flask import request, redirect, url_for, flash
 from routes import main_bp
 from models import Bils
 from extensions import db
+from services.receipt_service_bil import generate_bil_receipt
 
 
 @main_bp.route("/bils/add", methods=["POST"])
@@ -45,5 +46,10 @@ def add_bil():
 
     db.session.add(new_bil)
     db.session.commit()
+
+    try:
+        generate_bil_receipt(new_bil)
+    except RuntimeError as err:
+        flash(str(err))
 
     return redirect(url_for("main.bils"))

@@ -5,6 +5,7 @@ import time
 import urllib.request
 import socket
 import pathlib
+from services.backup_service import run_backup_if_needed
 
 # Redirect streams عند التشغيل كـ exe مغلف (يمنع كسر المكتبات لما console=False)
 if getattr(sys, 'frozen', False):
@@ -39,6 +40,8 @@ def run_flask():
 
 flask_thread = threading.Thread(target=run_flask, daemon=True)
 flask_thread.start()
+
+threading.Thread(target=run_backup_if_needed, daemon=True).start()
 
 for _ in range(40):
     try:

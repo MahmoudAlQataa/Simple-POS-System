@@ -3,6 +3,7 @@ from flask import request, redirect, url_for, flash
 from routes import main_bp
 from models import Bils
 from extensions import db
+from services.receipt_service_bil import generate_bil_receipt
 
 
 @main_bp.route("/bils/edit/<int:bil_id>", methods=["POST"])
@@ -34,5 +35,10 @@ def edit_bil(bil_id):
     bil.bil_remain_amount = bil_paid_amount - bil_price  # Always calculated server-side
 
     db.session.commit()
+
+    try:
+        generate_bil_receipt(bil)
+    except RuntimeError as err:
+        flash(str(err))
 
     return redirect(url_for("main.bils"))

@@ -48,19 +48,55 @@
   </section>
 </div>
 
-<!-- Filters (لسا مش مفعّلة سيرفرياً - رح نرجعها بخطوة الفلتر) -->
-<!--
 <section class="card card-filters">
-  ...
-</section>
--->
+  <h2 class="card-title">Filters</h2>
+  <form method="get" action="{{ url_for('main.bils') }}">
+    <div class="filters-form">
+      <label class="field">
+        <span class="field-label">Start</span>
+        <input name="start" value="{{ start_str or '' }}" type="date" class="input" />
+      </label>
+      <label class="field">
+        <span class="field-label">End</span>
+        <input name="end" value="{{ end_str or '' }}" type="date" class="input" />
+      </label>
+      <label class="field">
+        <span class="field-label">Campany Name</span>
+        <input name="search_campany" value="{{ search_campany or '' }}" type="text" class="input"
+          placeholder="search by campany..." />
+      </label>
+    </div>
 
-<!-- Totals (لسا مش محسوبة - رح نرجعها بعد الفلتر) -->
-<!--
+    <div class="filters-actions">
+      <button class="btn btn-primary" type="submit">Apply</button>
+      <a class="btn btn-secondary" href="{{ url_for('main.bils') }}">Reset</a>
+    </div>
+  </form>
+</section>
+
 <div class="field-row4">
-  ...
+
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">Total:</span>
+    <span class="total-badge">${{ '%.2f'|format(total or 0) }}</span>
+  </div>
+
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">Total Paid:</span>
+    <span class="total-badge">${{ '%.2f'|format(total_paid or 0) }}</span>
+  </div>
+
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">علينا (Outstanding):</span>
+    <span class="total-badge">${{ '%.2f'|format(total_outstanding or 0) }}</span>
+  </div>
+
+  <div class="total-line total-line-spaced">
+    <span class="mr-2">لنا (Overpaid):</span>
+    <span class="total-badge">${{ '%.2f'|format(total_overpaid or 0) }}</span>
+  </div>
+
 </div>
--->
 
 <!-- Bils table -->
 <section class="card table-card">
@@ -77,6 +113,7 @@
           <th class="text-right">Price</th>
           <th class="text-right">Paid Amount</th>
           <th class="text-right">Remain Amount</th>
+          <th>Receipt</th>
           <th>Edit</th>
           <th>Delete</th>
         </tr>
@@ -93,6 +130,14 @@
           <td class="text-right">${{ '%.2f'|format(b.bil_price) }}</td>
           <td class="text-right">${{ '%.2f'|format(b.bil_paid_amount) }}</td>
           <td class="text-right">${{ '%.2f'|format(b.bil_remain_amount) }}</td>
+
+          <td class="text-right">
+            <form action="{{ url_for('main.open_bil_receipt_route', bil_id=b.bil_id) }}" method="POST">
+              <button class="btn btn-secondary btn-sm">
+                Receipt
+              </button>
+            </form>
+          </td>
 
           <td class="text-right">
             <button type="button" class="btn btn-secondary btn-sm"
@@ -115,7 +160,7 @@
         {% else %}
 
         <tr>
-          <td colspan="8" class="empty-row">
+          <td colspan="9" class="empty-row">
             No bils yet — add your first one above.
           </td>
         </tr>

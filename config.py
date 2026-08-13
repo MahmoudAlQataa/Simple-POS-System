@@ -13,5 +13,7 @@ else:
 INSTANCE_DIR = os.path.join(BASE_DIR, "instance")
 DB_PATH = os.path.join(INSTANCE_DIR, "expenses.db")
 REPORTS_DIR = os.path.join(INSTANCE_DIR, "reports")
+BILS_REPORTS_DIR = os.path.join(INSTANCE_DIR, "Bils")
+BACKUP_DIR = os.path.join(os.path.dirname(BASE_DIR), "Backups")
 
 WKHTMLTOPDF_PATH = os.path.join(BUNDLE_DIR, "bin", "wkhtmltopdf.exe")
