@@ -32,7 +32,7 @@
 
                     <tr>
                         <td>{{ t.name }}</td>
-                        <td class="text-right">${{ '%.2f'|format(t.price) }}</td>
+                        <td class="text-right">₪ {{ '%.2f'|format(t.price) }}</td>
                         <td class="text-right">
 
                             <form action="{{ url_for('main.delete_test', test_id=t.id) }}" method="POST"

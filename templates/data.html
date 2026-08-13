@@ -88,7 +88,7 @@
     <!-- <div class="total-line">
       <span class="mr-2">Total:</span>
       <span class="total-badge">
-        ${{ '%2.f'|format(total or 0) }}
+        ₪ {{ '%2.f'|format(total or 0) }}
       </span>
     </div> -->
 
@@ -101,7 +101,7 @@
     <div class="total-line total-line-spaced">
         <span class="mr-2">Total:</span>
         <span class="total-badge">
-            ${{ '%2.f'|format(total or 0) }}
+            ₪ {{ '%2.f'|format(total or 0) }}
         </span>
     </div>
 
@@ -109,7 +109,7 @@
     <div class="total-line total-line-spaced">
         <span class="mr-2">Total Paid:</span>
         <span class="total-badge">
-            ${{ '%2.f'|format(total_paid or 0) }}
+            ₪ {{ '%2.f'|format(total_paid or 0) }}
         </span>
     </div>
 
@@ -117,13 +117,13 @@
     <div class="total-line total-line-spaced">
         <span class="mr-2">Total Outstanding:</span>
         <span class="total-badge">
-            ${{ '%2.f'|format(total_outstanding or 0) }}
+            ₪ {{ '%2.f'|format(total_outstanding or 0) }}
         </span>
     </div>
     <div class="total-line total-line-spaced">
         <span class="mr-2">Total Overpaid:</span>
         <span class="total-badge">
-            ${{ '%2.f'|format(total_overpaid or 0) }}
+            ₪ {{ '%2.f'|format(total_overpaid or 0) }}
         </span>
     </div>
 
@@ -171,10 +171,10 @@
                     <td>{{ e.name }}</td>
                     <td>{{ e.phone if e.phone else '-' }}</td>
                     <td>{{ e.category }}</td>
-                    <td class="text-right">${{ '%.2f'|format(e.price) }}</td> <!-- formating for 2 digets , -->
-                    <td class="text-right">${{ '%.2f'|format(e.discount) }}</td> <!-- formating for 2 digets , -->
-                    <td class="text-right">${{ '%.2f'|format(e.paid_amount) }}</td>
-                    <td class="text-right">${{ '%.2f'|format(e.remain_amount) }}</td>
+                    <td class="text-right">₪ {{ '%.2f'|format(e.price) }}</td> <!-- formating for 2 digets , -->
+                    <td class="text-right">₪ {{ '%.2f'|format(e.discount) }}</td> <!-- formating for 2 digets , -->
+                    <td class="text-right">₪ {{ '%.2f'|format(e.paid_amount) }}</td>
+                    <td class="text-right">₪ {{ '%.2f'|format(e.remain_amount) }}</td>
                     <td>{{ e.gender }}</td>
                     <td>{{ e.doctor_name if e.doctor_name else '-' }}</td>
 

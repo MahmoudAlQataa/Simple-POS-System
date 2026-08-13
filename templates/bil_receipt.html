@@ -231,7 +231,7 @@
                 <tr>
                     <td class="test-number">1</td>
                     <td>{{ bil.bil_category }}</td>
-                    <td>${{ "%.2f"|format(bil.bil_price) }}</td>
+                    <td>₪ {{ "%.2f"|format(bil.bil_price) }}</td>
                 </tr>
             </tbody>
 
@@ -244,16 +244,16 @@
                     <table class="payment-summary">
                         <tr class="payment-row total">
                             <td>Total</td>
-                            <td>${{ "%.2f"|format(bil.bil_price) }}</td>
+                            <td>₪ {{ "%.2f"|format(bil.bil_price) }}</td>
                         </tr>
                         <tr class="payment-row paid">
                             <td>Paid</td>
-                            <td>${{ "%.2f"|format(bil.bil_paid_amount) }}</td>
+                            <td>₪ {{ "%.2f"|format(bil.bil_paid_amount) }}</td>
                         </tr>
                         <tr class="payment-row">
                             <td>Remaining</td>
                             <td>
-                                ${{ "%.2f"|format(bil.bil_remain_amount|abs) }}
+                                ₪ {{ "%.2f"|format(bil.bil_remain_amount|abs) }}
                                 {% if bil.bil_remain_amount < 0 %} (عليه) {% elif bil.bil_remain_amount> 0 %}
                                     (له)
                                     {% endif %}

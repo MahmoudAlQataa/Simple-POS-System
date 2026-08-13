@@ -78,22 +78,22 @@
 
   <div class="total-line total-line-spaced">
     <span class="mr-2">Total:</span>
-    <span class="total-badge">${{ '%.2f'|format(total or 0) }}</span>
+    <span class="total-badge">₪ {{ '%.2f'|format(total or 0) }}</span>
   </div>
 
   <div class="total-line total-line-spaced">
     <span class="mr-2">Total Paid:</span>
-    <span class="total-badge">${{ '%.2f'|format(total_paid or 0) }}</span>
+    <span class="total-badge">₪ {{ '%.2f'|format(total_paid or 0) }}</span>
   </div>
 
   <div class="total-line total-line-spaced">
     <span class="mr-2">علينا (Outstanding):</span>
-    <span class="total-badge">${{ '%.2f'|format(total_outstanding or 0) }}</span>
+    <span class="total-badge">₪ {{ '%.2f'|format(total_outstanding or 0) }}</span>
   </div>
 
   <div class="total-line total-line-spaced">
     <span class="mr-2">لنا (Overpaid):</span>
-    <span class="total-badge">${{ '%.2f'|format(total_overpaid or 0) }}</span>
+    <span class="total-badge">₪ {{ '%.2f'|format(total_overpaid or 0) }}</span>
   </div>
 
 </div>
@@ -127,9 +127,9 @@
           <td>{{ b.bil_date.strftime("%Y-%m-%d") if b.bil_date else '' }}</td>
           <td>{{ b.bil_category }}</td>
           <td>{{ b.campany }}</td>
-          <td class="text-right">${{ '%.2f'|format(b.bil_price) }}</td>
-          <td class="text-right">${{ '%.2f'|format(b.bil_paid_amount) }}</td>
-          <td class="text-right">${{ '%.2f'|format(b.bil_remain_amount) }}</td>
+          <td class="text-right">₪ {{ '%.2f'|format(b.bil_price) }}</td>
+          <td class="text-right">₪ {{ '%.2f'|format(b.bil_paid_amount) }}</td>
+          <td class="text-right">₪ {{ '%.2f'|format(b.bil_remain_amount) }}</td>
 
           <td class="text-right">
             <form action="{{ url_for('main.open_bil_receipt_route', bil_id=b.bil_id) }}" method="POST">
