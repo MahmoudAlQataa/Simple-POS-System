@@ -74,7 +74,7 @@ To run the app inside a native desktop window instead of a browser tab, use:
 python launcher.py
 ```
 
-This requires `pywebview` to be installed on your machine (included in `requirements.txt`).
+This requires `pywebview` to be installed on your machine (included in `requirements.txt`). In this mode the app automatically picks a free port at startup instead of a fixed one, so there's nothing to configure — the webview window opens on its own.
 
 PDF receipt generation requires `wkhtmltopdf` — a copy is bundled in `bin/`, or set the path in `config.py`.
 
