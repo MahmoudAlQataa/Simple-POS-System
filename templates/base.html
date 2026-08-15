@@ -38,6 +38,21 @@
         </a>
       </nav>
     </div>
+
+    {% if local_ip %}
+    <div class="mobile-access-bar">
+      <span class="mobile-access-icon">📱</span>
+      <span class="mobile-access-text">
+        للدخول من الجوال (نفس شبكة الواي فاي):
+        <strong>http://{{ local_ip }}:{{ app_port }}</strong>
+      </span>
+    </div>
+    {% else %}
+    <div class="mobile-access-bar mobile-access-bar-offline">
+      <span class="mobile-access-icon">📴</span>
+      <span class="mobile-access-text">الدخول من الجوال غير متاح حالياً (لا يوجد اتصال شبكة)</span>
+    </div>
+    {% endif %}
   </header>
 
   <main class="container main-content">

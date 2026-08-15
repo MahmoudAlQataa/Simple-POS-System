@@ -18,3 +18,6 @@ BILS_REPORTS_DIR = os.path.join(INSTANCE_DIR, "Bils")
 BACKUP_DIR = os.path.join(os.path.dirname(BASE_DIR), "Backups")
 
 WKHTMLTOPDF_PATH = os.path.join(BUNDLE_DIR, "bin", "wkhtmltopdf.exe")
+
+# ثابت (مش عشوائي) عشان يمكن الوصول من الجوال بنفس الرقم كل مرة
+PORT = 5000

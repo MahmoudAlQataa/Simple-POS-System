@@ -4,7 +4,8 @@ from flask import Flask
 
 from extensions import db
 from routes import main_bp
-from services import get_free_port
+# from services import get_free_port
+from services import get_local_ip
 from flask_migrate import Migrate
 import config
 
@@ -28,13 +29,23 @@ def create_app():
 
     app.register_blueprint(main_bp)
 
+    @app.context_processor
+    def inject_network_info():
+        return {
+            "local_ip": get_local_ip(),
+            "app_port": config.PORT,
+        }
+
     return app
 
 
 app = create_app()
 
 
+# if __name__ == "__main__":
+#     num = get_free_port()
+#     print(f" * Starting Flask on the Free Port : {num}")
+#     app.run(debug=True, port=num)
 if __name__ == "__main__":
-    num = get_free_port()
-    print(f" * Starting Flask on the Free Port : {num}")
-    app.run(debug=True, port=num)
+    print(f" * Starting Flask on port {config.PORT} (accessible from local network)")
+    app.run(debug=True, host="0.0.0.0", port=config.PORT)

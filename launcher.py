@@ -6,6 +6,9 @@ import urllib.request
 import socket
 import pathlib
 from services.backup_service import run_backup_if_needed
+import config
+
+PORT = config.PORT
 
 # Redirect streams عند التشغيل كـ exe مغلف (يمنع كسر المكتبات لما console=False)
 if getattr(sys, 'frozen', False):
@@ -16,13 +19,13 @@ if getattr(sys, 'frozen', False):
     # تأكد إن الـ working directory صح (جنب الـ exe)
     os.chdir(os.path.dirname(sys.executable))
 
-def get_free_port():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(('127.0.0.1', 0))
-        return s.getsockname()[1]
+# def get_free_port():
+#     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+#         s.bind(('127.0.0.1', 0))
+#         return s.getsockname()[1]
 
 
-PORT = get_free_port()
+# PORT = get_free_port()
 
 
 def run_flask():
@@ -34,8 +37,8 @@ def run_flask():
 
     with app.app_context():
         upgrade(directory=migrations_dir)
-
-    app.run(host="127.0.0.1", port=PORT, debug=False, use_reloader=False)
+    # app.run(host="127.0.0.1", port=PORT, debug=False, use_reloader=False)
+    app.run(host="0.0.0.0", port=PORT, debug=False, use_reloader=False)
 
 
 flask_thread = threading.Thread(target=run_flask, daemon=True)
