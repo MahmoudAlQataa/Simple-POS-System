@@ -31,6 +31,7 @@ A local-first point-of-sale / expense tracking system: no internet dependency, n
 - Runs as a native Windows desktop app (no browser required)
 - Separate module for tracking incoming bills/invoices from suppliers (company name, category, amount, paid/remaining balance), with its own filtered list view and printable PDF receipts
 - Automatic local database backup on each app launch
+- Accessible from other devices (e.g. phones) on the same local network, with the access URL displayed directly in the app
 
 ## 📂 Project Structure
 
@@ -61,7 +62,7 @@ source venv/bin/activate  # on Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 flask db upgrade   # apply database migrations
-flask run
+python app.py
 ```
 
 This runs the app as a regular Flask server, accessible from a browser at `http://127.0.0.1:5000`.
@@ -74,7 +75,7 @@ To run the app inside a native desktop window instead of a browser tab, use:
 python launcher.py
 ```
 
-This requires `pywebview` to be installed on your machine (included in `requirements.txt`). In this mode the app automatically picks a free port at startup instead of a fixed one, so there's nothing to configure — the webview window opens on its own.
+This requires `pywebview` to be installed on your machine (included in `requirements.txt`). The app listens on a fixed port and binds to all network interfaces, so it's also reachable from other devices on the same local network at `http://<your-local-ip>:5000`.
 
 PDF receipt generation requires `wkhtmltopdf` — a copy is bundled in `bin/`, or set the path in `config.py`.
 
