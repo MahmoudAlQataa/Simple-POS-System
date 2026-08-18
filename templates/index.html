@@ -136,6 +136,11 @@
 <section class="card table-card">
   <div class="table-card-header">
     <h2 class="card-title">Expenses for Today</h2>
+
+    <!-- Quick instant search (client-side, doesn't touch the filter form) -->
+    <div class="quick-search">
+      <input type="text" id="quickNameSearch" class="input" placeholder="Quick search by name..." />
+    </div>
   </div>
   <div class="table-scroll">
     <table class="expenses-table">
@@ -266,15 +271,22 @@
   </div>
 </section>
 
-<!-- Charts -->
-<!-- <section class="charts-section">
-  <div class="card">
-    <h3 class="card-title">By Category</h3>
-    <canvas id="catChart" height="140"></canvas>
-  </div>
-  <div class="card">
-    <h3 class="card-title">Spending Over Time</h3>
-    <canvas id="dayChart" height="140"></canvas>
-  </div>
-</section> -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("quickNameSearch");
+    const rows = document.querySelectorAll(".expenses-table tbody tr");
+
+    input.addEventListener("input", function () {
+      const term = input.value.trim().toLowerCase();
+
+      rows.forEach(function (row) {
+        const nameCell = row.querySelector("td:nth-child(2)");
+        if (!nameCell) return; // safety for the "no expenses" empty row
+
+        const name = nameCell.textContent.trim().toLowerCase();
+        row.style.display = name.includes(term) ? "" : "none";
+      });
+    });
+  });
+</script>
 {% endblock %}
