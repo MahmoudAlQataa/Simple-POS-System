@@ -11,7 +11,7 @@ else:
     BUNDLE_DIR = BASE_DIR
 
 INSTANCE_DIR = os.path.join(BASE_DIR, "instance")
-DB_PATH = os.path.join(INSTANCE_DIR, "expenses.db")
+DB_PATH = os.environ.get("POS_DB_PATH") or os.path.join(INSTANCE_DIR, "expenses.db")
 REPORTS_DIR = os.path.join(INSTANCE_DIR, "reports")
 EXPORTS_DIR = os.path.join(INSTANCE_DIR, "exports")
 BILS_REPORTS_DIR = os.path.join(INSTANCE_DIR, "Bils")

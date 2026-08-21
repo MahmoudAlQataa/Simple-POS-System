@@ -114,9 +114,7 @@
           <th class="text-right">Price</th>
           <th class="text-right">Paid Amount</th>
           <th class="text-right">Remain Amount</th>
-          <th>Receipt</th>
-          <th>Edit</th>
-          <th>Delete</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -133,27 +131,22 @@
           <td class="text-right">₪ {{ '%.2f'|format(b.bil_remain_amount) }}</td>
 
           <td class="text-right">
-            <form action="{{ url_for('main.open_bil_receipt_route', bil_id=b.bil_id) }}" method="POST">
-              <button class="btn btn-secondary btn-sm">
-                Receipt
-              </button>
-            </form>
-          </td>
-
-          <td class="text-right">
-            <button type="button" class="btn btn-secondary btn-sm"
-              onclick="openEditBilModal({{ b.bil_id }}, '{{ b.bil_category }}', '{{ b.campany }}', {{ b.bil_price }}, {{ b.bil_paid_amount }})">
-              Edit
-            </button>
-          </td>
-
-          <td class="text-right">
-            <form action="{{ url_for('main.delete_bil', bil_id=b.bil_id) }}" method="POST"
-              onsubmit="return confirm('Are you sure you want to delete?')">
-              <button class="btn btn-danger btn-sm">
-                Delete
-              </button>
-            </form>
+            <div class="actions-dropdown">
+              <button type="button" class="actions-trigger">⋮</button>
+              <div class="actions-menu">
+                <form action="{{ url_for('main.open_bil_receipt_route', bil_id=b.bil_id) }}" method="POST">
+                  <button type="submit">Receipt</button>
+                </form>
+                <button type="button"
+                  onclick="openEditBilModal({{ b.bil_id }}, '{{ b.bil_category }}', '{{ b.campany }}', {{ b.bil_price }}, {{ b.bil_paid_amount }})">
+                  Edit
+                </button>
+                <form action="{{ url_for('main.delete_bil', bil_id=b.bil_id) }}" method="POST"
+                  onsubmit="return confirm('Are you sure you want to delete?')">
+                  <button type="submit" class="danger-item">Delete</button>
+                </form>
+              </div>
+            </div>
           </td>
         </tr>
 
@@ -161,7 +154,7 @@
         {% else %}
 
         <tr>
-          <td colspan="9" class="empty-row">
+          <td colspan="7" class="empty-row">
             No bils yet — add your first one above.
           </td>
         </tr>

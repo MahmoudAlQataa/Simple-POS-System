@@ -19,3 +19,8 @@ from routes import add_bil  # noqa: E402,F401
 from routes import edit_bil  # noqa: E402,F401
 from routes import delete_bil  # noqa: E402,F401
 from routes import receipt_bil  # noqa: E402,F401
+from routes import customer_search  # noqa: E402,F401
+from routes import customer  # noqa: E402,F401
+from routes import edit_customer  # noqa: E402,F401
+from routes import customer_payment  # noqa: E402,F401
+from routes import payment_receipt  # noqa: E402,F401

@@ -17,3 +17,4 @@ class Expense(db.Model):
     date = db.Column(db.Date, nullable=False, default=date.today)
     gender = db.Column(db.String(10), nullable=False)
     doctor_name = db.Column(db.String(50), nullable=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=True)

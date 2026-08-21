@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Statement</title>
+    <style>
+        .receipt {
+            width: 760px;
+            margin: 30px auto;
+            padding: 35px 40px;
+            background: #fff;
+            border: 1px solid #cfcfcf;
+            font-family: Arial, "Segoe UI", sans-serif;
+            color: #222;
+            box-sizing: border-box;
+        }
+
+        .patient-info {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #aaa;
+            margin-bottom: 20px;
+        }
+
+        .patient-info td {
+            padding: 10px 13px;
+            font-size: 13px;
+            border-bottom: 1px solid #aaa;
+            width: 33.33%;
+        }
+
+        .patient-info td.right-cell {
+            border-right: 1px solid #aaa;
+        }
+
+        .patient-info tr:last-child td {
+            border-bottom: none;
+        }
+
+        .patient-info span {
+            font-weight: 700;
+            margin-right: 7px;
+        }
+
+        .tests-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+        }
+
+        .tests-table th {
+            padding: 11px 12px;
+            background: #f1f1f1;
+            border: 1px solid #999;
+            font-size: 12px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .tests-table td {
+            padding: 10px 12px;
+            border: 1px solid #aaa;
+            font-size: 13px;
+        }
+
+        .tests-table th:last-child,
+        .tests-table td:last-child,
+        .tests-table th:nth-child(3),
+        .tests-table td:nth-child(3),
+        .tests-table th:nth-child(4),
+        .tests-table td:nth-child(4) {
+            text-align: right;
+        }
+
+        .payment-section-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .payment-section-table td {
+            border: none;
+            padding: 0;
+        }
+
+        .payment-summary {
+            width: 300px;
+            border: 1px solid #999;
+            border-collapse: collapse;
+            float: right;
+        }
+
+        .payment-row td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #ccc;
+            font-size: 13px;
+        }
+
+        .payment-row:last-child td {
+            border-bottom: none;
+        }
+
+        .payment-row td:last-child {
+            text-align: right;
+        }
+
+        .payment-row.total td {
+            font-weight: 700;
+            font-size: 14px;
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="receipt">
+
+        <table class="patient-info">
+            <tr>
+                <td class="right-cell"><span>Name:</span> {{ customer.name }}</td>
+                <td class="right-cell"><span>Gender:</span> {{ customer.gender }}</td>
+                <td><span>Statement No:</span> {{ customer.id }}</td>
+            </tr>
+            <tr>
+                <td class="right-cell"><span>Phone:</span> {{ customer.phone or '' }}</td>
+                <td class="right-cell"></td>
+                <td><span>Date:</span> {{ generated_date.strftime('%d/%m/%Y') }}</td>
+            </tr>
+        </table>
+
+        <table class="tests-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Owed Before</th>
+                    <th>Remaining Now</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td>{{ r.date.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ r.category }}</td>
+                    <td>₪ {{ "%.2f"|format(r._owed_before if r._owed_before is defined else (r.price - r.discount)) }}
+                    </td>
+                    <td>
+                        ₪ {{ "%.2f"|format(r.remain_amount|abs) }}
+                        {% if r.remain_amount < 0 %} (عليه) {% elif r.remain_amount> 0 %} (له) {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="payment-section-table">
+            <tr>
+                <td>
+                    <table class="payment-summary">
+                        <tr class="payment-row">
+                            <td>Total Owed</td>
+                            <td>₪ {{ "%.2f"|format(total_owed|abs) }}</td>
+                        </tr>
+                        <tr class="payment-row">
+                            <td>Total Surplus</td>
+                            <td>₪ {{ "%.2f"|format(total_surplus) }}</td>
+                        </tr>
+                        <tr class="payment-row total">
+                            <td>Net Balance</td>
+                            <td>
+                                ₪ {{ "%.2f"|format(net_balance|abs) }}
+                                {% if net_balance < 0 %} (عليه) {% elif net_balance> 0 %} (له) {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+
+</html>

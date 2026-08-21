@@ -3,9 +3,10 @@ from datetime import date, datetime
 
 from routes import main_bp
 from extensions import db
-from models import Expense, Test
+from models import Expense, Test, Customer
 from services.receipt_service import generate_receipt
-
+from services.payment_service import apply_fifo_credit
+from services.payment_receipt_service import generate_payment_receipt
 
 # add route
 @main_bp.route("/add", methods=['POST'])  # pulling the data from the front-end
@@ -74,6 +75,22 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
         flash("Please select a valid gender", "error")
         return redirect(url_for("main.index"))
 
+    # Customer linkage: use the selected customer_id if provided,
+    # otherwise create a new Customer record automatically.
+    customer_id_str = (request.form.get("customer_id") or "").strip()
+    if customer_id_str:
+        customer = Customer.query.get(int(customer_id_str))
+        if customer is None:
+            flash("Selected customer not found", "error")
+            return redirect(url_for("main.index"))
+        # keep the customer's phone in sync with the latest entered value
+        if phone:
+            customer.phone = phone
+    else:
+        customer = Customer(name=name, phone=phone, gender=gender)
+        db.session.add(customer)
+        db.session.flush()  # to get customer.id before creating the Expense
+
     # adding the data into the database
     e = Expense(
         name=name, 
@@ -86,12 +103,27 @@ def add():  # the data send by method='POST', action={{url_for('add')}}
         date=d,
         gender=gender,
         doctor_name=doctor_name,
+        customer_id=customer.id,
         )
     
     db.session.add(e)
     db.session.commit()
 
     generate_receipt(e)
+
+    # if this customer has any leftover surplus from a previous payment, auto-apply it
+    affected = apply_fifo_credit(customer.id)
+    for invoice in affected:
+        try:
+            generate_receipt(invoice)
+        except RuntimeError as err:
+            flash(str(err), "error")
+
+    if affected:
+        try:
+            generate_payment_receipt(customer, affected=affected)
+        except RuntimeError as err:
+            flash(str(err), "error")
 
     flash("Expense added", "success")
     print(f" * Form Received : {dict(request.form)}")

@@ -60,3 +60,7 @@ setup.iss
 
 # app icon
 AppIcon.ico
+
+# backfill_db
+backfill_db
+scripts
