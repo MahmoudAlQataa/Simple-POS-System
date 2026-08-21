@@ -25,6 +25,9 @@ A local-first point-of-sale / expense tracking system: no internet dependency, n
 - Full data page with:
   - Server-side filters (date range, name, item/category, outstanding/overpaid)
   - Instant client-side quick-search by name (filters visible rows as you type)
+- Customer records: live search when adding a transaction, per-customer profile page with full history and totals, editable customer details that sync across all linked records
+- Automatic payment matching (FIFO) — outstanding balances are settled against payments and new charges in order, oldest first
+- Combined account statement PDF per customer, regenerated automatically after each payment
 - Settings page to manage the list of available items/services and their prices
 - CSV export respecting all active filters
 - Printable PDF receipts per transaction (RTL Arabic support), auto-filed under `instance/reports/<year>/<month>/`
@@ -42,9 +45,9 @@ A local-first point-of-sale / expense tracking system: no internet dependency, n
     ├── launcher.py            # Desktop entry point (Flask thread + pywebview window)
     ├── bin/                   # Bundled wkhtmltopdf.exe + dependencies
     ├── migrations/            # Flask-Migrate schema history
-    ├── models/                # Expense, Test, Bils
-    ├── routes/                # index, add, edit, delete, data, settings, export, receipt, bils
-    ├── services/              # item lookup, date parsing, receipt generation, port selection, backup
+    ├── models/                # Expense, Test, Bils, Customer
+    ├── routes/                # index, add, edit, delete, data, settings, export, receipt, bils, customer
+    ├── services/              # item lookup, date parsing, receipt generation, payment matching, port selection, backup
     ├── templates/             # base, index, data, settings, receipt, bils
     └── static/
         ├── css/               # theme.css (variables) + style.css (layout/components)
