@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="card" style="max-width:360px;margin:60px auto;">
+    <h2 class="card-title">تسجيل الدخول</h2>
+    <form method="post">
+        <label class="field">
+            <span class="field-label">كلمة السر</span>
+            <input type="password" name="password" class="input" required autofocus />
+        </label>
+        <button type="submit" class="btn btn-primary" style="margin-top:12px;width:100%;">دخول</button>
+    </form>
+</div>
+{% endblock %}

@@ -188,7 +188,7 @@
                 <form action="{{ url_for('main.open_receipt_route', expense_id=e.id) }}" method="POST">
                   <button type="submit">Receipt</button>
                 </form>
-                {% if e.customer_id %}
+                {% if e.customer_id and session.get('role') == 'admin' %}
                 <a href="{{ url_for('main.customer_profile', customer_id=e.customer_id) }}">Customer</a>
                 {% endif %}
                 <button type="button"

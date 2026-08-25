@@ -4,9 +4,10 @@ from flask import render_template, request
 from routes import main_bp
 from models import Bils
 from services.date_service import parse_date_or_none
-
+from services.auth_service import admin_required
 
 @main_bp.route("/bils", methods=["GET"])
+@admin_required
 def bils():
     start_str = request.args.get("start", "")
     end_str = request.args.get("end", "")

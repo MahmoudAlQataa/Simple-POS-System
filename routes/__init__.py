@@ -4,6 +4,7 @@ main_bp = Blueprint("main", __name__)
 
 # Importing the route modules registers their view functions
 # onto main_bp (each module does @main_bp.route(...)).
+from routes import login  # noqa: E402,F401
 from routes import index  # noqa: E402,F401
 from routes import add  # noqa: E402,F401
 from routes import delete  # noqa: E402,F401

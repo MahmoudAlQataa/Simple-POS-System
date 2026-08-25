@@ -3,10 +3,11 @@ from services import parse_date_or_none, get_tests
 
 from routes import main_bp
 from models import Expense
-
+from services.auth_service import admin_required
 
 # data route - show all expenses (date + category + amount)
 @main_bp.route("/data", methods=["GET"])
+@admin_required
 def data():
     # # ======================== THE FILTERs ========================
     # read the start and end date from the front-end query parameters

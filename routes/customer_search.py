@@ -1,9 +1,10 @@
 from flask import request, jsonify
 from routes import main_bp
 from models import Customer
-
+from services.auth_service import login_required
 
 @main_bp.route("/customer/search")
+@login_required
 def customer_search():
     q = (request.args.get("q") or "").strip()
     if not q:

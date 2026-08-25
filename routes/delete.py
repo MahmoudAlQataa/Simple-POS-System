@@ -4,9 +4,11 @@ from routes import main_bp
 from extensions import db
 from models import Expense
 from services.receipt_service import delete_receipt
+from services.auth_service import login_required
 
 # Delete route
 @main_bp.route("/delete/<int:expense_id>", methods=["POST"])
+@login_required
 def delete(expense_id):
     e = Expense.query.get_or_404(expense_id)  # Get the expense by ID or return 404 if not found
 

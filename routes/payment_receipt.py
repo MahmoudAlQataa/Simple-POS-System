@@ -2,9 +2,10 @@ from flask import flash, redirect, url_for
 from routes import main_bp
 from models import Customer
 from services.payment_receipt_service import generate_payment_receipt, open_payment_receipt
-
+from services.auth_service import admin_required
 
 @main_bp.route("/customer/<int:customer_id>/statement/open", methods=["POST"])
+@admin_required
 def open_payment_receipt_route(customer_id):
     customer = Customer.query.get_or_404(customer_id)
 

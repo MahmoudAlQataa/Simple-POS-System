@@ -3,9 +3,10 @@ from flask import redirect, request, flash
 from routes import main_bp
 from models import Expense
 from services.receipt_service import open_receipt
-
+from services.auth_service import login_required
 
 @main_bp.route("/receipt/<int:expense_id>/open", methods=["POST"])
+@login_required
 def open_receipt_route(expense_id):
     e = Expense.query.get_or_404(expense_id)
 

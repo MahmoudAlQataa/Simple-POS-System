@@ -20,10 +20,13 @@
       </a>
 
       <nav class="nav-links">
+        {% if session.get('role') %}
         <a href="{{ url_for('main.index') }}"
           class="nav-link {% if request.endpoint == 'main.index' %}nav-link-active{% endif %}">
           Dashboard
         </a>
+        {% endif %}
+        {% if session.get('role') == 'admin' %}
         <a href="{{ url_for('main.data') }}"
           class="nav-link {% if request.endpoint == 'main.data' %}nav-link-active{% endif %}">
           Data
@@ -36,7 +39,14 @@
           class="nav-link {% if request.endpoint == 'main.settings' %}nav-link-active{% endif %}">
           Settings
         </a>
+        {% endif %}
       </nav>
+
+      {% if session.get('role') %}
+      <form action="{{ url_for('main.logout') }}" method="POST" style="margin:0;">
+        <button type="submit" class="btn btn-secondary">Logout</button>
+      </form>
+      {% endif %}
     </div>
 
     {% if local_ip %}

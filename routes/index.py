@@ -4,10 +4,12 @@ from datetime import date
 from routes import main_bp
 from models import Expense
 from services import get_tests
+from services.auth_service import login_required
 
 
 # the main route
 @main_bp.route("/")
+@login_required
 def index():
     
     q = Expense.query

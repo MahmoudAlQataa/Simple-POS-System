@@ -21,3 +21,6 @@ WKHTMLTOPDF_PATH = os.path.join(BUNDLE_DIR, "bin", "wkhtmltopdf.exe")
 
 # ثابت (مش عشوائي) عشان يمكن الوصول من الجوال بنفس الرقم كل مرة
 PORT = 5000
+
+ADMIN_PASSWORD = "admin123"
+WORKER_PASSWORD = "worker123"

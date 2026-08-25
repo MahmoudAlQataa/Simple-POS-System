@@ -2,8 +2,10 @@ from flask import request, url_for, flash, redirect
 from routes import main_bp
 from extensions import db
 from models import Customer, Expense
+from services.auth_service import admin_required
 
 @main_bp.route("/customer/<int:customer_id>/edit", methods=["POST"])
+@admin_required
 def edit_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
 

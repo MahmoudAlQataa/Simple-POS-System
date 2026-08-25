@@ -7,9 +7,11 @@ from models import Expense, Test, Customer
 from services.receipt_service import generate_receipt
 from services.payment_service import apply_fifo_credit
 from services.payment_receipt_service import generate_payment_receipt
+from services.auth_service import login_required
 
 # add route
 @main_bp.route("/add", methods=['POST'])  # pulling the data from the front-end
+@login_required
 def add():  # the data send by method='POST', action={{url_for('add')}}
     # pulling the data
     name = (request.form.get("name") or "").strip()  # this mean return somthing or an empety string but don't return null

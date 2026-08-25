@@ -4,9 +4,10 @@ from routes import main_bp
 from extensions import db
 from models import Expense
 from services.receipt_service import generate_receipt
-
+from services.auth_service import login_required
 
 @main_bp.route("/edit/<int:id>", methods=["POST"])
+@login_required
 def edit_expense(id):
     expense = Expense.query.get_or_404(id)
 

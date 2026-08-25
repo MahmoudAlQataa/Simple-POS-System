@@ -4,9 +4,10 @@ from routes import main_bp
 from models import Bils
 from extensions import db
 from services.receipt_service_bil import generate_bil_receipt
-
+from services.auth_service import admin_required
 
 @main_bp.route("/bils/edit/<int:bil_id>", methods=["POST"])
+@admin_required
 def edit_bil(bil_id):
     bil = Bils.query.get_or_404(bil_id)
 

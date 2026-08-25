@@ -702,15 +702,20 @@ a {
     max-width: 100%;
   }
 
-  /* الـ header: خلي العناصر تترص تحت بعض بشكل مرتب */
+  /* الـ header: اللوجو سطر لحاله، والـ nav + Logout بنفس السطر */
   .header-inner {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
   }
 
+  .logo {
+    flex-basis: 100%;
+  }
+
   .nav-links {
-    width: 100%;
+    flex: 1;
     flex-wrap: wrap;
   }
 

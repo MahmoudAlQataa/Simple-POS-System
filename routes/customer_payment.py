@@ -7,9 +7,10 @@ from models import Expense, Customer
 from services.receipt_service import generate_receipt
 from services.payment_service import apply_fifo_credit, PAYMENT_CATEGORY
 from services.payment_receipt_service import generate_payment_receipt
-
+from services.auth_service import admin_required
 
 @main_bp.route("/customer/<int:customer_id>/payment", methods=["POST"])
+@admin_required
 def customer_payment(customer_id):
     customer = Customer.query.get_or_404(customer_id)
 

@@ -5,8 +5,10 @@ from routes import main_bp
 from models import Expense, Customer
 from extensions import db
 from datetime import date
+from services.auth_service import admin_required
 
 @main_bp.route("/customer/<int:customer_id>", methods=["GET"])
+@admin_required
 def customer_profile(customer_id):
     customer = Customer.query.get_or_404(customer_id)
 

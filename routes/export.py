@@ -7,10 +7,11 @@ from routes import main_bp
 from models import Expense
 from services import parse_date_or_none
 import config
-
+from services.auth_service import admin_required
 
 # export route
 @main_bp.route("/export.csv", methods=["POST"])
+@admin_required
 def export_csv():
     start_str = (request.args.get("start") or "").strip()
     end_str = (request.args.get("end") or "").strip()

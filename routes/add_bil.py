@@ -5,9 +5,10 @@ from routes import main_bp
 from models import Bils
 from extensions import db
 from services.receipt_service_bil import generate_bil_receipt
-
+from services.auth_service import admin_required
 
 @main_bp.route("/bils/add", methods=["POST"])
+@admin_required
 def add_bil():
     bil_category = request.form.get("category", "").strip()
     campany = request.form.get("campany", "").strip()
