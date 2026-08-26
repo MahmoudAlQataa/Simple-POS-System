@@ -47,5 +47,16 @@ app = create_app()
 #     print(f" * Starting Flask on the Free Port : {num}")
 #     app.run(debug=True, port=num)
 if __name__ == "__main__":
+    from models import AuthSettings
+
+    with app.app_context():
+        if not AuthSettings.query.first():
+            default_auth = AuthSettings(
+                admin_password=config.ADMIN_PASSWORD,
+                worker_password=config.WORKER_PASSWORD,
+            )
+            db.session.add(default_auth)
+            db.session.commit()
+
     print(f" * Starting Flask on port {config.PORT} (accessible from local network)")
     app.run(debug=True, host="0.0.0.0", port=config.PORT)

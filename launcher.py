@@ -31,12 +31,22 @@ if getattr(sys, 'frozen', False):
 def run_flask():
     from app import app
     from flask_migrate import upgrade
+    from extensions import db
+    from models import AuthSettings
     import config
 
     migrations_dir = os.path.join(config.BUNDLE_DIR, "migrations")
 
     with app.app_context():
         upgrade(directory=migrations_dir)
+
+        if not AuthSettings.query.first():
+            default_auth = AuthSettings(
+                admin_password=config.ADMIN_PASSWORD,
+                worker_password=config.WORKER_PASSWORD,
+            )
+            db.session.add(default_auth)
+            db.session.commit()
     # app.run(host="127.0.0.1", port=PORT, debug=False, use_reloader=False)
     app.run(host="0.0.0.0", port=PORT, debug=False, use_reloader=False)
 

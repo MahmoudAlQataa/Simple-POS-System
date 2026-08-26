@@ -79,5 +79,31 @@
         </form>
     </section>
 
+    <!-- Change Password -->
+    <section class="card settings-password">
+        <h2 class="card-title">Change Password</h2>
+        <form method="post" action="{{ url_for('main.change_password') }}" class="add-form">
+            <label class="field">
+                <span class="field-label">Which password?</span>
+                <select name="target" class="input" required>
+                    <option value="">-- Select --</option>
+                    <option value="admin">Admin</option>
+                    <option value="worker">Worker</option>
+                </select>
+            </label>
+            <label class="field">
+                <span class="field-label">Old Password</span>
+                <input name="old_password" type="password" class="input" required />
+            </label>
+            <label class="field">
+                <span class="field-label">New Password</span>
+                <input name="new_password" type="password" class="input" required />
+            </label>
+            <button class="btn btn-primary btn-block" type="submit">
+                Update Password
+            </button>
+        </form>
+    </section>
+
 </div>
 {% endblock %}

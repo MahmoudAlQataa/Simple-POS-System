@@ -25,3 +25,4 @@ from routes import customer  # noqa: E402,F401
 from routes import edit_customer  # noqa: E402,F401
 from routes import customer_payment  # noqa: E402,F401
 from routes import payment_receipt  # noqa: E402,F401
+from routes import change_password  # noqa: E402,F401
