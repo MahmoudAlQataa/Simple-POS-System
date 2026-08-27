@@ -35,6 +35,7 @@ A local-first point-of-sale / expense tracking system: no internet dependency, n
 - Separate module for tracking incoming bills/invoices from suppliers (company name, category, amount, paid/remaining balance), with its own filtered list view and printable PDF receipts
 - Automatic local database backup on each app launch
 - Accessible from other devices (e.g. phones) on the same local network, with the access URL displayed directly in the app
+- Simple role-based access (admin / worker) with password-protected login and restricted views per role
 
 ## 📂 Project Structure
 
@@ -46,8 +47,8 @@ A local-first point-of-sale / expense tracking system: no internet dependency, n
     ├── bin/                   # Bundled wkhtmltopdf.exe + dependencies
     ├── migrations/            # Flask-Migrate schema history
     ├── models/                # Expense, Test, Bils, Customer
-    ├── routes/                # index, add, edit, delete, data, settings, export, receipt, bils, customer
-    ├── services/              # item lookup, date parsing, receipt generation, payment matching, port selection, backup
+    ├── routes/                # index, add, edit, delete, data, settings, export, receipt, bils, customer, login
+    ├── services/              # item lookup, date parsing, receipt generation, payment matching, port selection, backup, auth
     ├── templates/             # base, index, data, settings, receipt, bils
     └── static/
         ├── css/               # theme.css (variables) + style.css (layout/components)
