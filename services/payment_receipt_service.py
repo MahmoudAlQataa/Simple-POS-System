@@ -9,7 +9,7 @@ PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=config.WKHTMLTOPDF_PATH)
 
 PDFKIT_OPTIONS = {
     'encoding': 'UTF-8',
-    'margin-top': '2cm',
+    'margin-top': '6cm',
     'margin-bottom': '1cm',
     'margin-left': '1cm',
     'margin-right': '1cm',

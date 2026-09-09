@@ -66,29 +66,56 @@
 
       <div class="field-row2">
 
+
+        <!-- ================================================================ -->
+
         <label class="field">
           <span class="field-label">Tests</span>
 
           <div class="multiselect" id="testsDropdown">
+
+            <!-- زر فتح القائمة -->
             <button type="button" class="multiselect-toggle input" id="testsToggleBtn">
               <span id="testsToggleLabel">Select tests...</span>
               <span class="multiselect-arrow">▾</span>
             </button>
 
+            <!-- القائمة -->
             <div class="multiselect-panel" id="testsPanel">
-              {% for t in categories %}
-              <label class="multiselect-item">
-                <input type="checkbox" class="test-checkbox" value="{{ t.name }}" data-price="{{ t.price }}" />
-                <span>{{ t.name }} — ₪ {{ '%.2f'|format(t.price) }}</span>
-              </label>
-              {% endfor %}
+
+              <!-- حقل البحث -->
+              <div class="multiselect-search-wrapper">
+                <input type="text" id="testsSearchInput" class="multiselect-search" placeholder="Search tests..."
+                  autocomplete="off" />
+              </div>
+
+              <!-- الخيارات -->
+              <div id="testsOptions">
+                {% for t in categories %}
+                <label class="multiselect-item test-option" data-name="{{ t.name | lower }}">
+                  <input type="checkbox" class="test-checkbox" value="{{ t.name }}" data-price="{{ t.price }}" />
+
+                  <span>
+                    {{ t.name }} — ₪ {{ '%.2f'|format(t.price) }}
+                  </span>
+                </label>
+                {% endfor %}
+              </div>
+
+              <!-- تظهر عندما لا توجد نتائج -->
+              <div id="noTestsFound" class="no-tests-found" style="display: none;">
+                No tests found
+              </div>
+
             </div>
           </div>
 
-          <!-- هاد الحقل هو يلي فعلياً بينبعت للسيرفر -->
+          <!-- القيمة التي يتم إرسالها للسيرفر -->
           <input type="hidden" name="category" id="category" />
         </label>
 
+
+        <!-- ================================================================ -->
         <button class="btn btn-primary btn-add-expense" type="submit">
           Add Expense
         </button>
@@ -284,5 +311,59 @@
       });
     });
   });
+
+
+  // =======================================================================
+
+  const testsSearchInput = document.getElementById("testsSearchInput");
+  const testOptions = document.querySelectorAll(".test-option");
+  const noTestsFound = document.getElementById("noTestsFound");
+
+  testsSearchInput.addEventListener("input", function () {
+
+    const searchValue = this.value.toLowerCase().trim();
+
+    let visibleCount = 0;
+
+    testOptions.forEach(option => {
+
+      const testName = option.dataset.name;
+
+      if (testName.includes(searchValue)) {
+        option.style.display = "";
+        visibleCount++;
+      } else {
+        option.style.display = "none";
+      }
+
+    });
+
+    // إذا لم نجد أي Test
+    if (visibleCount === 0) {
+      noTestsFound.style.display = "block";
+    } else {
+      noTestsFound.style.display = "none";
+    }
+
+  });
+
+  document.querySelectorAll(".test-checkbox").forEach(checkbox => {
+
+    checkbox.addEventListener("change", function () {
+
+      testsSearchInput.value = "";
+
+      testOptions.forEach(option => {
+        option.style.display = "";
+      });
+
+      noTestsFound.style.display = "none";
+
+      testsSearchInput.focus();
+
+    });
+
+  });
+  // =======================================================================
 </script>
 {% endblock %}

@@ -776,3 +776,30 @@ a {
     order: 2;
   }
 }
+
+
+
+/*==================================================*/
+.multiselect-search-wrapper {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 8px;
+}
+
+.multiselect-search {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.multiselect-search:focus {
+  border-color: #007bff;
+}
+
+.no-tests-found {
+  padding: 10px;
+  text-align: center;
+  color: #777;
+}
