@@ -26,4 +26,4 @@ pywin32-ctypes==0.2.3
 setuptools==83.0.0
 SQLAlchemy==2.0.51
 typing_extensions==4.16.0
-Werkzeug==3.1.8
+Werkzeug==3.1.9
